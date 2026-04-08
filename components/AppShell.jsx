@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Header from './Header'
 import Sidebar from './Sidebar'
+import Breadcrumbs from './Breadcrumbs'
 
 export default function AppShell({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -69,13 +70,14 @@ export default function AppShell({ children }) {
                 >
                     <div className="h-[calc(100vh-4rem)] ">
                         <Sidebar
-                            onNavigate={closeSidebar}
+                            onNavigate={undefined}
                         />
                     </div>
                 </aside>
 
                 <main className="min-w-0 flex-1">
                     <div className="mx-auto w-full max-w-6xl px-6 py-4">
+                        <Breadcrumbs />
                         {children}
                     </div>
                 </main>
@@ -83,7 +85,10 @@ export default function AppShell({ children }) {
 
             {/* Mobile layout: drawer overlays content */}
             <div className="mx-auto flex w-full max-w-6xl flex-1 px-6 py-4 md:hidden">
-                <main className="min-w-0 flex-1">{children}</main>
+                <main className="min-w-0 flex-1">
+                    <Breadcrumbs />
+                    {children}
+                </main>
             </div>
 
             <aside

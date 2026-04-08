@@ -41,9 +41,15 @@ const GROUPS = [
 
 export default function Sidebar({ onNavigate, onClose }) {
     const pathname = usePathname()
-    const [openGroups, setOpenGroups] = useState(() => new Set(['saftey']))
+    const [openGroups, setOpenGroups] = useState(
+        () => new Set(GROUPS.map((g) => g.id))
+    )
 
     const activeHref = useMemo(() => pathname || '/', [pathname])
+
+    function handleNavigate() {
+        if (typeof onNavigate === 'function') onNavigate()
+    }
 
     function toggleGroup(id) {
         setOpenGroups((prev) => {
@@ -77,7 +83,7 @@ export default function Sidebar({ onNavigate, onClose }) {
             <nav className="mt-1 flex flex-col gap-1">
                 <Link
                     href="/"
-                    onClick={onNavigate}
+                    onClick={handleNavigate}
                     className={[
                         'rounded-xl px-3 py-2 text-sm hover:bg-[color:var(--color-background)]',
                         activeHref === '/'
@@ -90,7 +96,7 @@ export default function Sidebar({ onNavigate, onClose }) {
 
                 <Link
                     href="/issues"
-                    onClick={onNavigate}
+                    onClick={handleNavigate}
                     className={[
                         'rounded-xl px-3 py-2 text-sm hover:bg-[color:var(--color-background)]',
                         activeHref === '/issues'
@@ -129,7 +135,7 @@ export default function Sidebar({ onNavigate, onClose }) {
                                             <Link
                                                 key={it.href}
                                                 href={it.href}
-                                                onClick={onNavigate}
+                                                onClick={handleNavigate}
                                                 className={[
                                                     'rounded-xl px-3 py-2 text-sm hover:bg-[color:var(--color-background)]',
                                                     isActive

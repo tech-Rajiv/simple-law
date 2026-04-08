@@ -67,7 +67,7 @@ export default function AppShell({ children }) {
                     ].join(' ')}
                     aria-hidden={!sidebarOpen}
                 >
-                    <div className="h-[calc(100vh-4rem)] p-4">
+                    <div className="h-[calc(100vh-4rem)] ">
                         <Sidebar
                             onNavigate={closeSidebar}
                         />

@@ -13,7 +13,7 @@ export default function Home() {
         <HomeHero />
       </section>
 
-      <main className="w-full max-w-7xl mx-auto px-4 space-y-12">
+      <main className="w-full max-w-7xl mx-auto space-y-12">
         <HomeHowItWorks />
         {/* <HomeTopicsV2 /> */}
 

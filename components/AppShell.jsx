@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Header from './Header'
 import Sidebar from './Sidebar'
 import Breadcrumbs from './Breadcrumbs'
+import Footer from './Footer'
 
 export default function AppShell({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -31,6 +32,7 @@ export default function AppShell({ children }) {
             {isTestRoute ? (
                 <div className="flex min-h-dvh flex-1 flex-col">
                     {children}
+                    <Footer />
                 </div>
             ) : (
                 <>
@@ -111,6 +113,7 @@ export default function AppShell({ children }) {
                     <Sidebar onNavigate={closeSidebar} onClose={closeSidebar} />
                 </div>
             </aside>
+            <Footer />
                 </>
             )}
         </div>

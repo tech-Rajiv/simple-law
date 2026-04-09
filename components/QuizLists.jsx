@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useMemo, useState } from 'react'
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import SubHeading from './shared/SubHeading';
 
@@ -16,11 +16,13 @@ const TEST_IMAGES = {
 };
 
 export default function QuizLists() {   
+    const router = useRouter();
     const [tests, setTests] = useState([]);
     const [loadingTests, setLoadingTests] = useState(true);
     const [activeTab, setActiveTab] = useState("all"); // all | women
   
     const [error, setError] = useState(null);
+    const [confirmTest, setConfirmTest] = useState(null); // { slug, title } | null
   
     useEffect(() => {
       let cancelled = false;
@@ -47,6 +49,21 @@ export default function QuizLists() {
       if (activeTab === "women") return tests.filter((t) => Boolean(t?.onlyWomen));
       return tests;
     }, [activeTab, tests]);
+
+    function openConfirm(t) {
+      setConfirmTest({ slug: t.slug, title: t.title, onlyWomen: Boolean(t?.onlyWomen) });
+    }
+
+    function closeConfirm() {
+      setConfirmTest(null);
+    }
+
+    function startConfirmedTest() {
+      if (!confirmTest?.slug) return;
+      const next = confirmTest.slug;
+      closeConfirm();
+      router.push(`/test/${next}`);
+    }
   
     return (
       <section className="space-y-6">
@@ -97,9 +114,10 @@ export default function QuizLists() {
           ) : (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredTests.map((t) => (
-                <Link
+                <button
                   key={t.slug}
-                  href={`/test/${t.slug}`}
+                  type="button"
+                  onClick={() => openConfirm(t)}
                   className={classNames(
                     "text-left overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)]",
                     "transition-colors hover:border-[color:var(--color-primary)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--color-primary)]",
@@ -151,11 +169,51 @@ export default function QuizLists() {
                       </span>
                     </div>
                   </div>
-                </Link>
+                </button>
               ))}
             </div>
           )}
         </div>
+
+        {confirmTest ? (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Confirm start test"
+          >
+            <button
+              type="button"
+              className="absolute inset-0 bg-black/30"
+              onClick={closeConfirm}
+              aria-label="Close"
+            />
+            <div className="relative w-full max-w-md rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
+              <div className="text-base font-semibold text-[color:var(--text-primary)]">
+                Start “{confirmTest.title}”?
+              </div>
+              <div className="mt-2 text-sm text-[color:var(--text-secondary)]">
+                You’ll answer a short set of questions and get your score at the end.
+              </div>
+              <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={closeConfirm}
+                  className="inline-flex items-center justify-center rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-4 py-2 text-sm font-semibold text-[color:var(--text-primary)] hover:bg-[color:var(--bg-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[color:var(--color-primary)]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={startConfirmedTest}
+                  className="btn-primary px-4 py-2"
+                >
+                  Start test
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </section>
     );
   }

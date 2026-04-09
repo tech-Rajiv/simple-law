@@ -36,6 +36,11 @@ export default function TestRunnerPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
+  const progressStorageKey = useMemo(() => {
+    if (!slug) return null;
+    return `simple:test-progress:${slug}`;
+  }, [slug]);
+
   const title = TITLES[slug] || "Test";
   const learnMore = LEARN_MORE[slug] || null;
 
@@ -51,14 +56,55 @@ export default function TestRunnerPage() {
         setLoadingQuestions(true);
         setError(null);
         setResult(null);
-        setCurrentIdx(0);
-        setAnswersByQuestionId({});
 
         const res = await fetch(`/api/${slug}/get-questions`, { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed to load questions (${res.status})`);
         const data = await res.json();
         const qs = Array.isArray(data?.questions) ? data.questions : [];
-        if (!cancelled) setQuestions(qs);
+        if (cancelled) return;
+
+        setQuestions(qs);
+
+        // Restore in-progress state (session only) after questions load.
+        if (progressStorageKey) {
+          try {
+            const raw = sessionStorage.getItem(progressStorageKey);
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              const savedAnswers = parsed?.answersByQuestionId && typeof parsed.answersByQuestionId === "object"
+                ? parsed.answersByQuestionId
+                : {};
+              const savedIdx = Number.isFinite(parsed?.currentIdx) ? parsed.currentIdx : 0;
+              const savedQuestionIds = Array.isArray(parsed?.questionIds) ? parsed.questionIds.map(String) : null;
+              const currentQuestionIds = qs.map((q) => String(q.id));
+
+              const idsMatch =
+                Array.isArray(savedQuestionIds) &&
+                savedQuestionIds.length === currentQuestionIds.length &&
+                savedQuestionIds.every((id, i) => id === currentQuestionIds[i]);
+
+              if (idsMatch) {
+                setAnswersByQuestionId(savedAnswers);
+                setCurrentIdx(Math.max(0, Math.min(qs.length - 1, savedIdx)));
+              } else {
+                // Different question set; start fresh.
+                setAnswersByQuestionId({});
+                setCurrentIdx(0);
+                sessionStorage.removeItem(progressStorageKey);
+              }
+            } else {
+              setAnswersByQuestionId({});
+              setCurrentIdx(0);
+            }
+          } catch {
+            setAnswersByQuestionId({});
+            setCurrentIdx(0);
+            sessionStorage.removeItem(progressStorageKey);
+          }
+        } else {
+          setAnswersByQuestionId({});
+          setCurrentIdx(0);
+        }
       } catch (e) {
         if (!cancelled) setError(e?.message || "Failed to load questions");
       } finally {
@@ -69,7 +115,29 @@ export default function TestRunnerPage() {
     return () => {
       cancelled = true;
     };
-  }, [slug]);
+  }, [progressStorageKey, slug]);
+
+  // Persist progress so refresh doesn't restart the test.
+  useEffect(() => {
+    if (!progressStorageKey) return;
+    if (loadingQuestions) return;
+    if (!Array.isArray(questions) || questions.length === 0) return;
+    if (result) {
+      sessionStorage.removeItem(progressStorageKey);
+      return;
+    }
+    try {
+      const payload = {
+        currentIdx,
+        answersByQuestionId,
+        questionIds: questions.map((q) => String(q.id)),
+        savedAt: Date.now(),
+      };
+      sessionStorage.setItem(progressStorageKey, JSON.stringify(payload));
+    } catch {
+      // ignore storage errors (private mode/quota)
+    }
+  }, [answersByQuestionId, currentIdx, loadingQuestions, progressStorageKey, questions, result]);
 
   const currentQuestion = questions[currentIdx] || null;
   const totalQuestions = questions.length;
@@ -103,6 +171,13 @@ export default function TestRunnerPage() {
       if (!res.ok) throw new Error(`Verify failed (${res.status})`);
       const data = await res.json();
       setResult(data);
+      if (progressStorageKey) {
+        try {
+          sessionStorage.removeItem(progressStorageKey);
+        } catch {
+          // ignore
+        }
+      }
     } catch (e) {
       setError(e?.message || "Failed to submit");
     } finally {
@@ -113,7 +188,14 @@ export default function TestRunnerPage() {
   function onBack() {
     const ok = window.confirm("Go back? Your changes/answers will not be saved.");
     if (!ok) return;
-    router.push("/");
+    if (progressStorageKey) {
+      try {
+        sessionStorage.removeItem(progressStorageKey);
+      } catch {
+        // ignore
+      }
+    }
+    router.replace("/");
   }
 
   function onSelect(optionId) {
@@ -214,7 +296,7 @@ export default function TestRunnerPage() {
                             Explore articles and tips to improve your understanding.
                           </div>
                         </div>
-                        <Link href={learnMore.href} className="btn-primary py-3">
+                        <Link href={learnMore.href} replace className="btn-primary py-3">
                           Learn about {learnMore.label} →
                         </Link>
                       </div>

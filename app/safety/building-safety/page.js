@@ -1,26 +1,26 @@
 import TopicTiles from "@/components/TopicTiles";
 
 export const metadata = {
-  title: "Good habits",
+  title: "Building safety",
 };
 
 export default function Page() {
   const tiles = [
-    { slug: "being-kind", label: "Being kind" },
-    { slug: "clean-hands", label: "Clean hands" },
-    { slug: "screen-time", label: "Screen time" },
-    { slug: "sleep-well", label: "Sleep well" },
+    { slug: "fire-exits", label: "Fire exits" },
+    { slug: "earthquake-drill", label: "Earthquake drill" },
+    { slug: "safe-stairs", label: "Safe stairs" },
+    { slug: "first-alert", label: "First alert" },
   ];
 
   return (
     <div className="rounded-xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
       <h1 className="text-2xl font-semibold text-[color:var(--text-primary)]">
-        Good habits
+        Building safety
       </h1>
       <p className="mt-4 text-sm leading-relaxed text-[color:var(--text-muted)]">
         Choose a topic below.
       </p>
-      <TopicTiles basePath="/learning/good-habits" tiles={tiles} />
+      <TopicTiles basePath="/safety/building-safety" tiles={tiles} />
     </div>
   );
 }

@@ -1,39 +1,99 @@
 @import "tailwindcss";
 
 :root {
-  /* Theme tokens (edit these to change site colors) */
-  --background: #fff7ed; /* warm peach */
-  --surface: #ffffff;
-  --text: #0f172a; /* slate-900 */
-  --muted: #475569; /* slate-600 */
+  /* Backgrounds */
+  --bg-page: #f3f4f4;
+  --bg-section: #f7f8f0;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f7f8f0;
+  --bg-hover: #efefef;
 
-  /* Vibrant brand palette (kids + seniors: high contrast) */
-  --primary: #2563eb; /* bright blue */
-  --secondary: #f97316; /* orange */
-  --accent: #22c55e; /* green */
+  /* Text */
+  --text-primary: #2c2c2c;
+  --text-secondary: #6b6b6b;
+  --text-muted: #9e9e9e;
+  --text-inverse: #ffffff;
 
-  /* UI tokens */
-  --border: rgba(15, 23, 42, 0.14);
-  --ring: rgba(37, 99, 235, 0.35);
+  /* Single accent (active states, primary actions) */
+  --color-primary: #ff8a80;
+  --color-primary-hover: #ff6f61;
+
+  /* Secondary actions only (use sparingly) */
+  --color-secondary: #612d53;
+  --color-secondary-hover: #4a2440;
+
+  /* UI */
+  --border-light: #e5e7eb;
+  --border-active: var(--color-primary);
+
+  /* States (neutral hover; coral tint only when active) */
+  --hover-bg: #efefef;
+  --active-bg: #ffe5e0;
+
+  /* Feedback */
+  --success: #4caf50;
+  --warning: #ffc107;
+  --error: #f44336;
+
+  /* Sensitive sections: neutral shell (no pink surround) */
+  --bg-topic-serious: #f0f0f0;
+
+  /* Elevation — single subtle shadow everywhere */
+  --shadow-soft: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 @theme inline {
-  /* Tailwind-friendly tokens */
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-text: var(--text);
-  --color-muted: var(--muted);
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
-  --color-border: var(--border);
-  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--text);
+  background: var(--bg-page);
+  color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Primary / secondary buttons — consistent, accessible targets */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: var(--color-secondary);
+  color: var(--text-inverse);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
 }

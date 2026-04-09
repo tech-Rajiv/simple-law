@@ -6,27 +6,24 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <div className="mx-auto w-full max-w-2xl rounded-3xl bg-[color:var(--color-surface)] p-8 shadow-sm">
-      <p className="text-sm font-medium text-[color:var(--color-secondary)]">
+    <div className="mx-auto w-full max-w-2xl rounded-xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-6 shadow-[var(--shadow-soft)]">
+      <p className="text-sm font-medium text-[color:var(--text-muted)]">
         404
       </p>
-      <h1 className="mt-2 text-2xl font-semibold text-[color:var(--color-text)]">
+      <h1 className="mt-2 text-2xl font-semibold text-[color:var(--text-primary)]">
         Page not found
       </h1>
-      <p className="mt-2 text-sm leading-6 text-[color:var(--color-muted)]">
+      <p className="mt-2 text-sm leading-6 text-[color:var(--text-muted)]">
         The page you’re looking for doesn’t exist (or was moved).
       </p>
 
       <div className="mt-6 flex items-center gap-3">
-        <Link
-          href="/"
-          className="rounded-xl bg-[color:var(--color-primary)] px-4 py-2 text-sm font-medium text-white"
-        >
+        <Link href="/" className="btn-primary">
           Go home
         </Link>
         <Link
           href="/issues"
-          className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] px-4 py-2 text-sm font-medium text-[color:var(--color-text)] hover:bg-[color:var(--color-background)]"
+          className="rounded-lg border border-[color:var(--border-light)] bg-transparent px-4 py-2 text-sm font-medium text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)]"
         >
           Open Issues
         </Link>

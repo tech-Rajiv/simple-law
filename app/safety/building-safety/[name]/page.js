@@ -7,7 +7,7 @@ export default async function Page({ params }) {
   return (
     <div className="rounded-xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
       <p className="text-sm font-medium text-[color:var(--text-secondary)]">
-        First aid
+        Building safety
       </p>
       <h1 className="mt-1 text-2xl font-semibold text-[color:var(--text-primary)]">
         {title}

@@ -6,18 +6,18 @@ export const metadata = {
 
 export default function Page() {
   const tiles = [
-    { slug: "daily-routine", label: "Daily routine", bg: "bg-sky-100" },
-    { slug: "medication", label: "Medication", bg: "bg-violet-100" },
-    { slug: "safe-home", label: "Safe home", bg: "bg-emerald-100" },
-    { slug: "gentle-exercise", label: "Gentle exercise", bg: "bg-amber-100" },
+    { slug: "daily-routine", label: "Daily routine" },
+    { slug: "medication", label: "Medication" },
+    { slug: "safe-home", label: "Safe home" },
+    { slug: "gentle-exercise", label: "Gentle exercise" },
   ];
 
   return (
-    <div className="rounded-3xl bg-[color:var(--color-surface)] p-6 shadow-sm">
-      <h1 className="text-2xl font-semibold text-[color:var(--color-text)]">
+    <div className="rounded-xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
+      <h1 className="text-2xl font-semibold text-[color:var(--text-primary)]">
         Senior care
       </h1>
-      <p className="mt-2 text-sm text-[color:var(--color-muted)]">
+      <p className="mt-4 text-sm leading-relaxed text-[color:var(--text-muted)]">
         Choose a topic below.
       </p>
       <TopicTiles basePath="/health/senior-care" tiles={tiles} />

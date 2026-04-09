@@ -35,7 +35,7 @@ export default function AppShell({ children }) {
             {/* Drawer overlay (mobile only) */}
             <div
                 className={[
-                    'fixed inset-0 z-40 bg-black/30 transition-opacity md:hidden',
+                    'fixed inset-0 z-40 bg-black/20 transition-opacity md:hidden',
                     sidebarOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
                 ].join(' ')}
                 onClick={closeSidebar}
@@ -43,26 +43,26 @@ export default function AppShell({ children }) {
             />
 
             {/* Desktop sidebar edge toggle (below header) */}
-            <button
+            {/* <button
                 type="button"
                 onClick={toggleSidebar}
                 aria-expanded={sidebarOpen}
                 aria-label="Toggle sidebar"
                 className={[
-                    'fixed z-30 hidden rounded-r-xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] px-2 py-3 text-sm font-semibold text-[color:var(--color-text)] shadow-sm hover:bg-[color:var(--color-background)] md:block',
+                    'fixed z-30 hidden rounded-r-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-2 py-3 text-sm font-semibold text-[color:var(--text-primary)] shadow-[var(--shadow-soft)] hover:bg-[color:var(--hover-bg)] md:block',
                     'top-20',
                     'transition-[left] duration-200 ease-out',
                     sidebarOpen ? 'left-72' : 'left-0',
                 ].join(' ')}
             >
                 {sidebarOpen ? '<' : '>'}
-            </button>
+            </button> */}
 
             {/* Desktop layout: sidebar on left edge, content shrinks */}
             <div className="hidden w-full flex-1 md:flex">
-                <aside
+                {/* <aside
                     className={[
-                        'shrink-0 overflow-hidden border-r border-[color:var(--color-border)] bg-[color:var(--color-surface)]',
+                        'shrink-0 overflow-hidden border-r border-[color:var(--border-light)] bg-[color:var(--bg-sidebar)]',
                         'transition-[width] duration-200 ease-out',
                         sidebarOpen ? 'w-72' : 'w-0',
                     ].join(' ')}
@@ -73,21 +73,21 @@ export default function AppShell({ children }) {
                             onNavigate={undefined}
                         />
                     </div>
-                </aside>
+                </aside> */}
 
                 <main className="min-w-0 flex-1">
-                    <div className="mx-auto w-full max-w-6xl px-6 py-4">
+                    <div className="mx-auto w-full max-w-6xl px-5 py-6 md:px-6 md:py-8">
                         <Breadcrumbs />
-                        {children}
+                        <div className="space-y-8">{children}</div>
                     </div>
                 </main>
             </div>
 
             {/* Mobile layout: drawer overlays content */}
-            <div className="mx-auto flex w-full max-w-6xl flex-1 px-6 py-4 md:hidden">
+            <div className="mx-auto flex w-full max-w-6xl flex-1 px-5 py-6 md:hidden">
                 <main className="min-w-0 flex-1">
                     <Breadcrumbs />
-                    {children}
+                    <div className="space-y-8">{children}</div>
                 </main>
             </div>
 

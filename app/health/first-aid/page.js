@@ -6,18 +6,18 @@ export const metadata = {
 
 export default function Page() {
   const tiles = [
-    { slug: "cuts-scrapes", label: "Cuts & scrapes", bg: "bg-rose-100" },
-    { slug: "burns", label: "Burns", bg: "bg-orange-100" },
-    { slug: "sprains", label: "Sprains", bg: "bg-lime-100" },
-    { slug: "emergency-call", label: "Emergency call", bg: "bg-indigo-100" },
+    { slug: "cuts-scrapes", label: "Cuts & scrapes" },
+    { slug: "burns", label: "Burns" },
+    { slug: "sprains", label: "Sprains" },
+    { slug: "emergency-call", label: "Emergency call" },
   ];
 
   return (
-    <div className="rounded-3xl bg-[color:var(--color-surface)] p-6 shadow-sm">
-      <h1 className="text-2xl font-semibold text-[color:var(--color-text)]">
+    <div className="rounded-xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
+      <h1 className="text-2xl font-semibold text-[color:var(--text-primary)]">
         First aid
       </h1>
-      <p className="mt-2 text-sm text-[color:var(--color-muted)]">
+      <p className="mt-4 text-sm leading-relaxed text-[color:var(--text-muted)]">
         Choose a topic below.
       </p>
       <TopicTiles basePath="/health/first-aid" tiles={tiles} />

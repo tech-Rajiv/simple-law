@@ -39,6 +39,17 @@ const GROUPS = [
     },
 ]
 
+function itemClass(isActive) {
+    return [
+        'block rounded-md border-l-[3px] border-l-transparent py-2.5 pl-[calc(1rem-3px)] pr-3 text-sm transition-colors',
+        'bg-transparent',
+        'hover:bg-[color:var(--hover-bg)]',
+        isActive
+            ? 'border-l-[color:var(--color-primary)] bg-[color:var(--active-bg)] font-medium text-[color:var(--color-primary)]'
+            : 'text-[color:var(--text-primary)]',
+    ].join(' ')
+}
+
 export default function Sidebar({ onNavigate, onClose }) {
     const pathname = usePathname()
     const [openGroups, setOpenGroups] = useState(
@@ -61,9 +72,9 @@ export default function Sidebar({ onNavigate, onClose }) {
     }
 
     return (
-        <div className="h-full rounded-r-2xl rounded-l-none bg-[color:var(--color-surface)] p-3 md:rounded-2xl">
-            <div className="flex items-center justify-between gap-2 px-2 py-2">
-                <p className="text-sm font-semibold text-[color:var(--color-text)] md:hidden">
+        <div className="h-full bg-transparent p-4 md:rounded-lg">
+            <div className="flex items-center justify-between gap-2 pb-2">
+                <p className="text-sm font-semibold text-[color:var(--text-primary)] md:hidden">
                     Menu
                 </p>
                 <div className="flex items-center gap-2">
@@ -72,7 +83,7 @@ export default function Sidebar({ onNavigate, onClose }) {
                             type="button"
                             onClick={onClose}
                             aria-label="Close sidebar"
-                            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-text)] hover:bg-[color:var(--color-background)] md:hidden"
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[color:var(--border-light)] bg-transparent text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)] md:hidden"
                         >
                             <span className="text-lg leading-none">×</span>
                         </button>
@@ -80,16 +91,11 @@ export default function Sidebar({ onNavigate, onClose }) {
                 </div>
             </div>
 
-            <nav className="mt-1 flex flex-col gap-1">
+            <nav className="mt-2 flex flex-col gap-0.5">
                 <Link
                     href="/"
                     onClick={handleNavigate}
-                    className={[
-                        'rounded-xl px-3 py-2 text-sm hover:bg-[color:var(--color-background)]',
-                        activeHref === '/'
-                            ? 'bg-[color:var(--color-background)] font-medium text-[color:var(--color-primary)]'
-                            : 'text-[color:var(--color-text)]',
-                    ].join(' ')}
+                    className={itemClass(activeHref === '/')}
                 >
                     Home
                 </Link>
@@ -97,36 +103,31 @@ export default function Sidebar({ onNavigate, onClose }) {
                 <Link
                     href="/issues"
                     onClick={handleNavigate}
-                    className={[
-                        'rounded-xl px-3 py-2 text-sm hover:bg-[color:var(--color-background)]',
-                        activeHref === '/issues'
-                            ? 'bg-[color:var(--color-background)] font-medium text-[color:var(--color-primary)]'
-                            : 'text-[color:var(--color-text)]',
-                    ].join(' ')}
+                    className={itemClass(activeHref === '/issues')}
                 >
                     Issues
                 </Link>
 
-                <div className="my-2 h-px bg-[color:var(--color-border)]" />
+                <div className="my-4 h-px bg-[color:var(--border-light)]" />
 
                 {GROUPS.map((group) => {
                     const isOpen = openGroups.has(group.id)
                     return (
-                        <div key={group.id} className="flex flex-col">
+                        <div key={group.id} className="flex flex-col gap-0.5">
                             <button
                                 type="button"
                                 onClick={() => toggleGroup(group.id)}
-                                className="flex items-center justify-between rounded-xl px-3 py-2 text-left text-sm font-medium text-[color:var(--color-text)] hover:bg-[color:var(--color-background)]"
+                                className="flex w-full items-center justify-between rounded-md bg-transparent px-3 py-2.5 text-left text-sm font-medium text-[color:var(--text-secondary)] hover:bg-[color:var(--hover-bg)]"
                                 aria-expanded={isOpen}
                             >
                                 <span className="capitalize">{group.label}</span>
-                                <span className="text-[color:var(--color-muted)]">
+                                <span className="text-[color:var(--text-muted)]" aria-hidden>
                                     {isOpen ? '▾' : '▸'}
                                 </span>
                             </button>
 
                             {isOpen ? (
-                                <div className="mt-1 flex flex-col gap-1 pl-4">
+                                <div className="mt-1 flex flex-col gap-0.5 pl-2">
                                     {group.items.map((it) => {
                                         const isActive =
                                             activeHref === it.href ||
@@ -136,12 +137,7 @@ export default function Sidebar({ onNavigate, onClose }) {
                                                 key={it.href}
                                                 href={it.href}
                                                 onClick={handleNavigate}
-                                                className={[
-                                                    'rounded-xl px-3 py-2 text-sm hover:bg-[color:var(--color-background)]',
-                                                    isActive
-                                                        ? 'bg-[color:var(--color-background)] font-medium text-[color:var(--color-primary)]'
-                                                        : 'text-[color:var(--color-muted)]',
-                                                ].join(' ')}
+                                                className={itemClass(isActive)}
                                             >
                                                 {it.label}
                                             </Link>
@@ -156,4 +152,3 @@ export default function Sidebar({ onNavigate, onClose }) {
         </div>
     )
 }
-

@@ -2,6 +2,8 @@ import Link from 'next/link'
 import React from 'react'
 
 export default function page() {
+  
+
     const options = [
         {
             href: '/health/first-aid',

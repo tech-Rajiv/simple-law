@@ -76,7 +76,7 @@ export default function AppShell({ children }) {
                 </aside> */}
 
                 <main className="min-w-0 flex-1">
-                    <div className="mx-auto w-full max-w-6xl px-5 py-6 md:px-6 md:py-8">
+                    <div className="mx-auto w-full max-w-[1500px] px-5 py-6 md:px-6 md:py-8">
                         <Breadcrumbs />
                         <div className="space-y-8">{children}</div>
                     </div>

@@ -1,0 +1,63 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import React from 'react'
+
+function joinHref(basePath, hrefOrSlug) {
+  const base = String(basePath ?? '').trim()
+  const raw = String(hrefOrSlug ?? '').trim()
+  if (!raw) return base || '/'
+  if (raw.startsWith('/')) return raw
+  if (!base) return raw.startsWith('/') ? raw : `/${raw}`
+  const b = base.endsWith('/') ? base.slice(0, -1) : base
+  const r = raw.startsWith('/') ? raw.slice(1) : raw
+  return `${b}/${r}`
+}
+
+export default function SingleTopicCard({ topic, basePath = '' }) {
+  const href = topic?.href ? joinHref('', topic.href) : joinHref(basePath, topic?.slug)
+  return (
+    <Link
+      href={href}
+      className="group overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)] transition-colors hover:bg-[color:var(--hover-bg)]"
+    >
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-[color:var(--bg-section)]">
+        {topic?.imageSrc ? (
+          <Image
+            src={topic.imageSrc}
+            alt={topic?.label ?? ''}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            priority={Boolean(topic?.imagePriority)}
+          />
+        ) : (
+          <div
+            className="absolute inset-0 border-b border-[color:var(--border-light)]"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="truncate text-base font-semibold text-[color:var(--text-primary)] group-hover:text-[color:var(--color-primary)]">
+              {topic?.label}
+            </h3>
+            {topic?.description ? (
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-[color:var(--text-secondary)]">
+                {topic.description}
+              </p>
+            ) : null}
+          </div>
+          <span
+            className="shrink-0 text-[color:var(--text-muted)] transition-colors group-hover:text-[color:var(--color-primary)]"
+            aria-hidden="true"
+          >
+            →
+          </span>
+        </div>
+      </div>
+    </Link>
+    )
+}

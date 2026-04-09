@@ -30,7 +30,7 @@ export default function Header({ sidebarOpen, onToggleSidebar }) {
 
     return (
         <header className="border-b border-[color:var(--border-light)] bg-[color:var(--bg-card)]">
-            <div className="mx-auto w-full max-w-6xl px-5 py-4 md:px-6">
+            <div className="mx-auto w-full max-w-[1800px] px-5 py-4 md:px-6">
                 <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-6">
                     <div className="flex flex-col gap-5 md:flex-row md:flex-1 md:items-center md:gap-8">
                         <div className="flex items-center justify-between gap-3 md:justify-start">

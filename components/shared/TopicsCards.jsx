@@ -4,8 +4,8 @@ import SubHeading from './SubHeading'
 
 export default function TopicsCards({ topics = [], basePath = '', title = '', description = '' }) {
   return (
-    <div className="mt-8">
-      <SubHeading title={title} description={description} />
+    <div className="">
+      {/* <SubHeading title={title} description={description} /> */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {topics.map((topic, idx) => (
           <SingleTopicCard

@@ -18,7 +18,7 @@ export default function SingleTopicCard({ topic, basePath = '' }) {
   return (
     <Link
       href={href}
-      className="group overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)] transition-colors hover:bg-[color:var(--hover-bg)]"
+      className="group overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)] transition-colors hover:bg-[color:var(--bg-section)]"
     >
       <div className="relative aspect-[16/9] w-full overflow-hidden bg-[color:var(--bg-section)]">
         {topic?.imageSrc ? (
@@ -41,7 +41,7 @@ export default function SingleTopicCard({ topic, basePath = '' }) {
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="truncate text-base font-semibold text-[color:var(--text-primary)] group-hover:text-[color:var(--color-primary)]">
+            <h3 className="truncate text-base font-semibold text-[color:var(--text-primary)] ">
               {topic?.label}
             </h3>
             {topic?.description ? (
@@ -55,6 +55,12 @@ export default function SingleTopicCard({ topic, basePath = '' }) {
             aria-hidden="true"
           >
             →
+          </span>
+        </div>
+
+        <div className="mt-4">
+          <span className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] transition-colors ">
+            Read safety <span aria-hidden="true">→</span>
           </span>
         </div>
       </div>

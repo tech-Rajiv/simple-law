@@ -188,7 +188,7 @@ export default function QuizLists() {
               onClick={closeConfirm}
               aria-label="Close"
             />
-            <div className="relative w-full max-w-md rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
+            <div className="relative w-full max-w-md md:max-w-2xl rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
               <div className="text-base font-semibold text-[color:var(--text-primary)]">
                 Start “{confirmTest.title}”?
               </div>

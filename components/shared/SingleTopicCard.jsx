@@ -18,7 +18,7 @@ export default function SingleTopicCard({ topic, basePath = '' }) {
   return (
     <Link
       href={href}
-      className="group overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)] transition-colors hover:bg-[color:var(--bg-section)]"
+      className="overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)]"
     >
       <div className="relative aspect-[16/9] w-full overflow-hidden bg-[color:var(--bg-section)]">
         {topic?.imageSrc ? (
@@ -27,7 +27,7 @@ export default function SingleTopicCard({ topic, basePath = '' }) {
             alt={topic?.label ?? ''}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-300 hover:scale-[1.03]"
             priority={Boolean(topic?.imagePriority)}
           />
         ) : (
@@ -50,16 +50,10 @@ export default function SingleTopicCard({ topic, basePath = '' }) {
               </p>
             ) : null}
           </div>
-          <span
-            className="shrink-0 text-[color:var(--text-muted)] transition-colors group-hover:text-[color:var(--color-primary)]"
-            aria-hidden="true"
-          >
-            →
-          </span>
         </div>
 
         <div className="mt-4">
-          <span className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] transition-colors ">
+          <span className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]">
             Read safety <span aria-hidden="true">→</span>
           </span>
         </div>

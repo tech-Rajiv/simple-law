@@ -1,12 +1,15 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { usePathname } from "next/navigation";
 import Header from './Header'
 import Sidebar from './Sidebar'
 import Breadcrumbs from './Breadcrumbs'
 
 export default function AppShell({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const pathname = usePathname();
+    const isTestRoute = pathname === "/test" || pathname?.startsWith("/test/");
 
     const openSidebar = useCallback(() => setSidebarOpen(true), [])
     const closeSidebar = useCallback(() => setSidebarOpen(false), [])
@@ -25,6 +28,12 @@ export default function AppShell({ children }) {
 
     return (
         <div className="flex min-h-full flex-1 flex-col">
+            {isTestRoute ? (
+                <div className="flex min-h-dvh flex-1 flex-col">
+                    {children}
+                </div>
+            ) : (
+                <>
             <Header
                 sidebarOpen={sidebarOpen}
                 onToggleSidebar={toggleSidebar}
@@ -102,6 +111,8 @@ export default function AppShell({ children }) {
                     <Sidebar onNavigate={closeSidebar} onClose={closeSidebar} />
                 </div>
             </aside>
+                </>
+            )}
         </div>
     )
 }

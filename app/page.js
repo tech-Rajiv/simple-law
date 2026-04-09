@@ -1,9 +1,13 @@
-import Image from "next/image";
+import QuizLists from "@/components/QuizLists";
 
 export default function Home() {
   return (
-    <div className="">
-      <h1>Hello World</h1>
-    </div>
+    <main className="w-full max-w-7xl mx-auto px-4 py-10">
+      <QuizLists />
+    </main>
   );
 }
+
+
+
+

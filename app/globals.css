@@ -15,12 +15,12 @@
   --text-inverse: #ffffff;
 
   /* Single accent (active states, primary actions) */
-  --color-primary: #ff8a80;
-  --color-primary-hover: #ff6f61;
+  --color-primary: #612d53;
+  --color-primary-hover: #4a2440;
 
   /* Secondary actions only (use sparingly) */
-  --color-secondary: #612d53;
-  --color-secondary-hover: #4a2440;
+  --color-secondary: #ffcee3;
+  --color-secondary-hover: #ffb9d7;
 
   /* UI */
   --border-light: #e5e7eb;
@@ -82,7 +82,7 @@ body {
   justify-content: center;
   border-radius: 0.5rem;
   background: var(--color-secondary);
-  color: var(--text-inverse);
+  color: var(--text-primary);
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 500;

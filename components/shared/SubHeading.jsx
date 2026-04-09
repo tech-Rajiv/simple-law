@@ -29,10 +29,6 @@ export default function SubHeading({ title, description, eyebrow, right }) {
       {right ? <div className="shrink-0">{right}</div> : null}
       </div>
 
-      {/* <div
-        className="mt-4 h-px w-full bg-[color:var(--border-light)]"
-        aria-hidden="true"
-      /> */}
     </div>
   )
 }

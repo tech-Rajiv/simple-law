@@ -10,6 +10,7 @@ const NAV = [
     { href: '/assessment', label: 'All Assessments' },
     { href: '/emotional-intelligence', label: 'Emotional Intelligence' },
     { href: '/women', label: 'Women' },
+    { href: '/safety', label: 'Safety' },
     { href: '/awareness', label: 'Real-world Awareness' },
     { href: '/complaint', label: 'Complaint guide' },
 ]

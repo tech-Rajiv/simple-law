@@ -13,12 +13,9 @@ export default function Home() {
   return (
     <div className="w-full py-10 space-y-20">
       <HeroSection />
-
-      
       <HomeHowItWorks />
       <ExploreTopics />
       <FeaturedSection />
-      {/* <HomeClarity /> */}
     </div>
   );
 }

@@ -62,7 +62,7 @@ function HeroSection() {
                   href="/assessment"
                   className="inline-flex w-full items-center justify-center rounded-xl bg-[color:var(--color-primary)] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 sm:w-auto"
                 >
-                  Get Assessment
+                  Get Assessment Test
                 </Link>
                 <Link
 

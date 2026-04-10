@@ -8,10 +8,9 @@ import React, { useState } from 'react'
 const NAV = [
     { href: '/', label: 'Home' },
     { href: '/assessment', label: 'All Assessments' },
-    { href: '/emotion-quotient', label: 'Emotion Quotient' },
-    { href: '/safety', label: 'Safety' },
+    { href: '/emotional-intelligence', label: 'Emotional Intelligence' },
     { href: '/women', label: 'Women' },
-    { href: '/health', label: 'Health & Fitness' },
+    { href: '/awareness', label: 'Real-world Awareness' },
     { href: '/complaint', label: 'Complaint guide' },
 ]
 

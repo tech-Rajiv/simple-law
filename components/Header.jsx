@@ -7,11 +7,12 @@ import React, { useState } from 'react'
 
 const NAV = [
     { href: '/', label: 'Home' },
-    { href: '/assessment', label: 'Assessment Test' },
+    { href: '/assessment', label: 'All Assessments' },
+    { href: '/emotion-quotient', label: 'Emotion Quotient' },
     { href: '/safety', label: 'Safety' },
     { href: '/women', label: 'Women' },
     { href: '/health', label: 'Health & Fitness' },
-    { href: '/complaint', label: 'How to file a complaint' },
+    { href: '/complaint', label: 'Complaint guide' },
 ]
 
 function navLinkClass(pathname, href) {

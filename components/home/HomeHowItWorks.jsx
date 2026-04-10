@@ -1,46 +1,56 @@
 'use client'
 
+import SubHeading from "../shared/SubHeading"
+
 export default function HomeHowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-24">
+    <section id="how-it-works" className="scroll-mt-12">
       <div className="flex items-end justify-between gap-6">
-        <div>
-          <h2 className="text-2xl font-bold text-[color:var(--text-primary)]">How it works</h2>
-          <p className="mt-2 text-sm text-[color:var(--text-secondary)]">Quick quizzes, simple scoring, and clear takeaways.</p>
-        </div>
-        <a href="#take-test" className="hidden sm:inline-flex btn-secondary">
-          Start now
-        </a>
+       <SubHeading title="How it works" description="Understand, test, and improve yourself in just a few steps." />
+       
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className=" grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--active-bg)] text-[color:var(--color-primary)] font-bold">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--bg-section)] text-[color:var(--color-primary)] font-bold">
             1
           </div>
-          <h3 className="mt-4 text-base font-semibold text-[color:var(--text-primary)]">Pick a topic</h3>
+          <h3 className="mt-4 text-base font-semibold text-[color:var(--text-primary)]">Learn</h3>
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-secondary)]">
-            Choose what you want to improve right now—safety, EQ, awareness, or women-focused issues.
+          Explore topics like emotional intelligence, safety, fitness, and real-world awareness.
+          Get practical knowledge that actually helps in daily life.
           </p>
         </div>
 
         <div className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--active-bg)] text-[color:var(--color-primary)] font-bold">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--bg-section)] text-[color:var(--color-primary)] font-bold">
             2
           </div>
-          <h3 className="mt-4 text-base font-semibold text-[color:var(--text-primary)]">Answer scenarios</h3>
+          <h3 className="mt-4 text-base font-semibold text-[color:var(--text-primary)]">Take a test</h3>
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-secondary)]">
-            Learn through practical questions you can relate to—built to be fast, not overwhelming.
+          Assess your understanding through simple, topic-based questions.
+          Find out how well you truly know the subject.
           </p>
         </div>
 
         <div className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--active-bg)] text-[color:var(--color-primary)] font-bold">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--bg-section)] text-[color:var(--color-primary)] font-bold">
             3
           </div>
           <h3 className="mt-4 text-base font-semibold text-[color:var(--text-primary)]">Get your score</h3>
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-secondary)]">
-            Submit and see your score instantly. Come back later and retake to track progress.
+          See your performance instantly with clear insights.
+          Understand your strengths and where you need improvement.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)]">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--bg-section)] text-[color:var(--color-primary)] font-bold">
+            4
+          </div>
+          <h3 className="mt-4 text-base font-semibold text-[color:var(--text-primary)]">Improve</h3>
+          <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-secondary)]">
+          Go back, learn more, and retake tests to grow continuously.
+          Track your progress over time.
           </p>
         </div>
       </div>

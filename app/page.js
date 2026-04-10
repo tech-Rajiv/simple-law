@@ -1,4 +1,7 @@
+import HeroSection from "@/components/HeroSection";
 import QuizLists from "@/components/QuizLists";
+import ExploreTopics from "@/components/home/ExploreTopics";
+import FeaturedSection from "@/components/home/FeaturedSection";
 import HomeClarity from "@/components/home/HomeClarity";
 import HomeFaq from "@/components/home/HomeFaq";
 import HomeFinalCta from "@/components/home/HomeFinalCta";
@@ -8,14 +11,14 @@ import HomeHowItWorks from "@/components/home/HomeHowItWorks";
 
 export default function Home() {
   return (
-    <div className="w-full py-10 space-y-12">
-      <section className="w-full ">
-    100xLife
-      </section>
+    <div className="w-full py-10 space-y-20">
+      <HeroSection />
 
-      <main className="w-full max-w-7xl mx-auto space-y-12">
-        
-      </main>
+      
+      <HomeHowItWorks />
+      <ExploreTopics />
+      <FeaturedSection />
+      {/* <HomeClarity /> */}
     </div>
   );
 }

@@ -4,17 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { allAssesments } from "@/app/utils/allAssesments";
 
 function classNames(...xs) {
   return xs.filter(Boolean).join(" ");
 }
-
-const TITLES = {
-  safety: "Safety Test",
-  emotion: "Emotion Test",
-  women: "Women Issue Test",
-  awareness: "Awareness Test",
-};
 
 const LEARN_MORE = {
   safety: { href: "/safety", label: "Safety", imageSrc: "/category/learn-safety.webp" },
@@ -22,6 +16,46 @@ const LEARN_MORE = {
   women: { href: "/safety", label: "Women safety", imageSrc: "/category/learn-women.jpg" },
   awareness: { href: "/learning", label: "Awareness", imageSrc: "/category/learn-awareness.webp" },
 };
+
+const CATEGORY_LEARN_MORE = {
+  safety: LEARN_MORE.safety,
+  "emotion-quotient": LEARN_MORE.emotion,
+  "women-issue": LEARN_MORE.women,
+  "social-awareness": LEARN_MORE.awareness,
+  "fitness-health": LEARN_MORE.awareness,
+};
+
+function parseTestSlug(slug) {
+  // Expected: "<categoryKey>-<id>" e.g. "women-issue-7"
+  const s = String(slug || "");
+  const idx = s.lastIndexOf("-");
+  if (idx <= 0) return { categoryKey: s, id: null };
+  const categoryKey = s.slice(0, idx);
+  const idRaw = s.slice(idx + 1);
+  const id = Number.isFinite(Number(idRaw)) ? Number(idRaw) : idRaw || null;
+  return { categoryKey, id };
+}
+
+function normalizeQuestions(rawQuestions) {
+  const qs = Array.isArray(rawQuestions) ? rawQuestions : [];
+  return qs.map((q, i) => {
+    const qId = q?.id != null ? String(q.id) : String(i + 1);
+    const rawOptions = Array.isArray(q?.options) ? q.options : [];
+    const options = rawOptions.map((opt, oi) => {
+      const text = typeof opt === "string" ? opt : String(opt?.text || "");
+      return { id: `${qId}:${oi + 1}`, text };
+    });
+    const answerText = q?.answer != null ? String(q.answer) : "";
+    const correct = options.find((o) => o.text === answerText) || null;
+    return {
+      id: qId,
+      question: String(q?.question || ""),
+      options,
+      correctOptionId: correct?.id ?? null,
+      imageUrl: String(q?.imageUrl || ""),
+    };
+  });
+}
 
 export default function TestRunnerPage() {
   const params = useParams();
@@ -41,8 +75,18 @@ export default function TestRunnerPage() {
     return `simple:test-progress:${slug}`;
   }, [slug]);
 
-  const title = TITLES[slug] || "Test";
-  const learnMore = LEARN_MORE[slug] || null;
+  const { categoryKey, id: testId } = useMemo(() => parseTestSlug(slug), [slug]);
+
+  const activeTest = useMemo(() => {
+    const tests = allAssesments?.[categoryKey];
+    if (!Array.isArray(tests)) return null;
+    if (testId == null) return null;
+    const byId = tests.find((t) => String(t?.id) === String(testId));
+    return byId || null;
+  }, [categoryKey, testId]);
+
+  const title = activeTest?.title || "Test";
+  const learnMore = CATEGORY_LEARN_MORE[categoryKey] || null;
 
   const resultByQuestionId = useMemo(() => {
     if (!result?.results || !Array.isArray(result.results)) return new Map();
@@ -57,10 +101,11 @@ export default function TestRunnerPage() {
         setError(null);
         setResult(null);
 
-        const res = await fetch(`/api/${slug}/get-questions`, { cache: "no-store" });
-        if (!res.ok) throw new Error(`Failed to load questions (${res.status})`);
-        const data = await res.json();
-        const qs = Array.isArray(data?.questions) ? data.questions : [];
+        if (!activeTest) {
+          throw new Error("Test not found.");
+        }
+
+        const qs = normalizeQuestions(activeTest?.allQuestions);
         if (cancelled) return;
 
         setQuestions(qs);
@@ -115,7 +160,7 @@ export default function TestRunnerPage() {
     return () => {
       cancelled = true;
     };
-  }, [progressStorageKey, slug]);
+  }, [activeTest, progressStorageKey, slug]);
 
   // Persist progress so refresh doesn't restart the test.
   useEffect(() => {
@@ -159,17 +204,20 @@ export default function TestRunnerPage() {
     setError(null);
     setSubmitting(true);
     try {
-      const answers = questions.map((q) => ({
-        questionId: q.id,
-        optionId: finalAnswersByQuestionId?.[q.id] || null,
-      }));
-      const res = await fetch(`/api/${slug}/verify-answers`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ answers }),
+      const results = questions.map((q) => {
+        const selectedOptionId = finalAnswersByQuestionId?.[q.id] ?? null;
+        const correctOptionId = q.correctOptionId ?? null;
+        const isCorrect = Boolean(selectedOptionId && correctOptionId && selectedOptionId === correctOptionId);
+        return {
+          questionId: q.id,
+          selectedOptionId,
+          correctOptionId,
+          isCorrect,
+        };
       });
-      if (!res.ok) throw new Error(`Verify failed (${res.status})`);
-      const data = await res.json();
+      const score = results.reduce((acc, r) => acc + (r.isCorrect ? 1 : 0), 0);
+      const data = { score, total: questions.length, results };
+
       setResult(data);
       if (progressStorageKey) {
         try {

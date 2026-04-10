@@ -1,14 +1,17 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
 
 const NAV = [
-
+    { href: '/', label: 'Home' },
+    { href: '/assessment', label: 'Assessment Test' },
     { href: '/safety', label: 'Safety' },
-    { href: '/health', label: 'Health' },
-    { href: '/learning', label: 'Learning' },
+    { href: '/women', label: 'Women' },
+    { href: '/health', label: 'Health & Fitness' },
+    { href: '/complaint', label: 'How to file a complaint' },
 ]
 
 function navLinkClass(pathname, href) {
@@ -35,29 +38,34 @@ export default function Header({ sidebarOpen, onToggleSidebar }) {
                     <div className="flex flex-col gap-5 md:flex-row md:flex-1 md:items-center md:gap-8">
                         <div className="flex items-center justify-between gap-3 md:justify-start">
                             <div className="flex items-center gap-3">
-                                {/* <button
-                                    type="button"
-                                    onClick={onToggleSidebar}
-                                    aria-expanded={sidebarOpen}
-                                    aria-label="Toggle sidebar"
-                                    className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[color:var(--border-light)] bg-transparent text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)] md:hidden"
-                                >
-                                    <span className="text-lg leading-none">
-                                        {sidebarOpen ? '×' : '≡'}
-                                    </span>
-                                </button> */}
+              
 
                                 <div
-                                    className="h-5 w-5 shrink-0 rounded-sm border-2 border-[color:var(--color-primary)] bg-transparent"
+                                    className=""
                                     aria-hidden="true"
-                                />
+                                >
+                                    <Image src="/home/brand/brand-logo.png" alt="100xLife" width={40} height={40} className="object-contain" />
+                                </div>
                                 <Link
                                     href="/"
                                     className="text-base font-semibold tracking-tight text-[color:var(--text-primary)]"
                                 >
-                                    SimpleLaw
+                                    100xLife
                                 </Link>
                             </div>
+                            <div className="flex  lg:hidden items-center justify-end">
+                        <a
+                            href="https://wa.me/919998487424?text=Hi%20there%21"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="WhatsApp support: +91 9998487424"
+                            className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border-light)] bg-transparent px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)]"
+                        >
+                            <Image src="/images/whatsapp.png" alt="WhatsApp" width={20} height={20} className="object-contain" />
+                            <span className="whitespace-nowrap"> support</span>
+                        </a>
+                    </div>
+
                         </div>
 
                         <nav
@@ -76,53 +84,21 @@ export default function Header({ sidebarOpen, onToggleSidebar }) {
                         </nav>
                     </div>
 
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end md:gap-5">
-                        <label className="sr-only" htmlFor="site-search">
-                            Search
-                        </label>
-                        <input
-                            id="site-search"
-                            placeholder="Search…"
-                            className="h-10 w-full min-w-0 rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-4 py-2 text-sm text-[color:var(--text-primary)] outline-none placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--border-active)] md:w-56"
-                        />
-
-                        <label className="sr-only" htmlFor="language-en">
-                            Language
-                        </label>
-                        <div
-                            className="flex h-10 shrink-0 items-stretch gap-6 border-b border-[color:var(--border-light)]"
-                            role="group"
-                            aria-label="Language"
+                    <div className="flex hidden lg:flex items-center justify-end">
+                        <a
+                            href="https://wa.me/919998487424?text=Hi%20there%21"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="WhatsApp support: +91 9998487424"
+                            className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border-light)] bg-transparent px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)]"
                         >
-                            <button
-                                id="language-en"
-                                type="button"
-                                onClick={() => setLanguage('en')}
-                                aria-pressed={language === 'en'}
-                                className={[
-                                    '-mb-px border-b-2 pb-2 text-sm font-medium transition-colors',
-                                    language === 'en'
-                                        ? 'border-[color:var(--color-primary)] text-[color:var(--color-primary)]'
-                                        : 'border-transparent text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]',
-                                ].join(' ')}
-                            >
-                                English
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setLanguage('hi')}
-                                aria-pressed={language === 'hi'}
-                                className={[
-                                    '-mb-px border-b-2 pb-2 text-sm font-medium transition-colors',
-                                    language === 'hi'
-                                        ? 'border-[color:var(--color-primary)] text-[color:var(--color-primary)]'
-                                        : 'border-transparent text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)]',
-                                ].join(' ')}
-                            >
-                                Hindi
-                            </button>
-                        </div>
+                            <Image src="/images/whatsapp.png" alt="WhatsApp" width={20} height={20} className="object-contain" />
+                            <span className="whitespace-nowrap">WhatsApp support</span>
+                        </a>
                     </div>
+
+
+                  
                 </div>
             </div>
         </header>

@@ -4,10 +4,43 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { allAssesments } from "@/app/utils/allAssesments";
 
 function classNames(...xs) {
   return xs.filter(Boolean).join(" ");
+}
+
+// const DEFAULT_API_BASE = "https://admin.100xlife.online";
+const DEFAULT_API_BASE = "http://localhost:3001";
+
+function getApiBase() {
+  const raw = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const base = (raw && String(raw).trim()) || DEFAULT_API_BASE;
+  return base.replace(/\/+$/, "");
+}
+
+async function fetchJson(path, { method = "GET", body } = {}) {
+  const base = getApiBase();
+  const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
+
+  const res = await fetch(url, {
+    method,
+    headers: body ? { "Content-Type": "application/json" } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    let msg = `Request failed (${res.status})`;
+    try {
+      const data = await res.json();
+      msg = data?.error || data?.message || msg;
+    } catch {
+      // ignore
+    }
+    throw new Error(msg);
+  }
+
+  return res.json();
 }
 
 const LEARN_MORE = {
@@ -17,42 +50,31 @@ const LEARN_MORE = {
   awareness: { href: "/learning", label: "Awareness", imageSrc: "/category/learn-awareness.webp" },
 };
 
-const CATEGORY_LEARN_MORE = {
-  safety: LEARN_MORE.safety,
-  "emotion-quotient": LEARN_MORE.emotion,
-  "women-issue": LEARN_MORE.women,
-  "social-awareness": LEARN_MORE.awareness,
-  "fitness-health": LEARN_MORE.awareness,
-};
-
-function parseTestSlug(slug) {
-  // Expected: "<categoryKey>-<id>" e.g. "women-issue-7"
-  const s = String(slug || "");
-  const idx = s.lastIndexOf("-");
-  if (idx <= 0) return { categoryKey: s, id: null };
-  const categoryKey = s.slice(0, idx);
-  const idRaw = s.slice(idx + 1);
-  const id = Number.isFinite(Number(idRaw)) ? Number(idRaw) : idRaw || null;
-  return { categoryKey, id };
-}
-
 function normalizeQuestions(rawQuestions) {
   const qs = Array.isArray(rawQuestions) ? rawQuestions : [];
+  const base = getApiBase();
   return qs.map((q, i) => {
     const qId = q?.id != null ? String(q.id) : String(i + 1);
     const rawOptions = Array.isArray(q?.options) ? q.options : [];
     const options = rawOptions.map((opt, oi) => {
+      const id = opt?.id != null ? String(opt.id) : `${qId}:${oi + 1}`;
       const text = typeof opt === "string" ? opt : String(opt?.text || "");
-      return { id: `${qId}:${oi + 1}`, text };
+      return { id, text };
     });
-    const answerText = q?.answer != null ? String(q.answer) : "";
-    const correct = options.find((o) => o.text === answerText) || null;
+
+    const rawImage = q?.image != null ? String(q.image) : "";
+    const imageUrl =
+      rawImage && /^https?:\/\//i.test(rawImage)
+        ? rawImage
+        : rawImage
+          ? `${base}${rawImage.startsWith("/") ? rawImage : `/${rawImage}`}`
+          : "";
+
     return {
       id: qId,
-      question: String(q?.question || ""),
+      question: String(q?.questionText || q?.question || ""),
       options,
-      correctOptionId: correct?.id ?? null,
-      imageUrl: String(q?.imageUrl || ""),
+      imageUrl,
     };
   });
 }
@@ -69,24 +91,28 @@ export default function TestRunnerPage() {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [testMeta, setTestMeta] = useState(null);
 
   const progressStorageKey = useMemo(() => {
     if (!slug) return null;
     return `simple:test-progress:${slug}`;
   }, [slug]);
 
-  const { categoryKey, id: testId } = useMemo(() => parseTestSlug(slug), [slug]);
+  const testId = useMemo(() => {
+    const n = Number(slug);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }, [slug]);
 
-  const activeTest = useMemo(() => {
-    const tests = allAssesments?.[categoryKey];
-    if (!Array.isArray(tests)) return null;
-    if (testId == null) return null;
-    const byId = tests.find((t) => String(t?.id) === String(testId));
-    return byId || null;
-  }, [categoryKey, testId]);
-
-  const title = activeTest?.title || "Test";
-  const learnMore = CATEGORY_LEARN_MORE[categoryKey] || null;
+  const title = testMeta?.title || "Test";
+  const learnMore = useMemo(() => {
+    const subjectTitle = testMeta?.subject?.title ? String(testMeta.subject.title).toLowerCase() : "";
+    if (subjectTitle.includes("safety")) return LEARN_MORE.safety;
+    if (subjectTitle.includes("emotion")) return LEARN_MORE.emotion;
+    if (subjectTitle.includes("women")) return LEARN_MORE.women;
+    if (subjectTitle.includes("fitness")) return LEARN_MORE.awareness;
+    if (subjectTitle.includes("social") || subjectTitle.includes("awareness")) return LEARN_MORE.awareness;
+    return null;
+  }, [testMeta]);
 
   const resultByQuestionId = useMemo(() => {
     if (!result?.results || !Array.isArray(result.results)) return new Map();
@@ -100,14 +126,23 @@ export default function TestRunnerPage() {
         setLoadingQuestions(true);
         setError(null);
         setResult(null);
+        setTestMeta(null);
 
-        if (!activeTest) {
-          throw new Error("Test not found.");
-        }
+        if (!testId) throw new Error("Test not found.");
 
-        const qs = normalizeQuestions(activeTest?.allQuestions);
+        const testData = await fetchJson(`/api/tests/${encodeURIComponent(String(testId))}`);
+        const test = testData?.test || null;
+        if (!test) throw new Error("Test not found.");
+
+        const rawQuestions = Array.isArray(test?.questions) ? test.questions : [];
+        const qs = normalizeQuestions(rawQuestions);
         if (cancelled) return;
 
+        setTestMeta({
+          id: test?.id ?? testId,
+          title: test?.title || "Test",
+          subject: test?.subject || null,
+        });
         setQuestions(qs);
 
         // Restore in-progress state (session only) after questions load.
@@ -160,7 +195,7 @@ export default function TestRunnerPage() {
     return () => {
       cancelled = true;
     };
-  }, [activeTest, progressStorageKey, slug]);
+  }, [progressStorageKey, slug, testId]);
 
   // Persist progress so refresh doesn't restart the test.
   useEffect(() => {
@@ -204,19 +239,24 @@ export default function TestRunnerPage() {
     setError(null);
     setSubmitting(true);
     try {
-      const results = questions.map((q) => {
-        const selectedOptionId = finalAnswersByQuestionId?.[q.id] ?? null;
-        const correctOptionId = q.correctOptionId ?? null;
-        const isCorrect = Boolean(selectedOptionId && correctOptionId && selectedOptionId === correctOptionId);
-        return {
-          questionId: q.id,
-          selectedOptionId,
-          correctOptionId,
-          isCorrect,
-        };
-      });
-      const score = results.reduce((acc, r) => acc + (r.isCorrect ? 1 : 0), 0);
-      const data = { score, total: questions.length, results };
+      if (!testId) throw new Error("Test not found.");
+      const payload = {
+        testId,
+        answers: questions.map((q) => {
+          const selected = finalAnswersByQuestionId?.[q.id] ?? null;
+          return {
+            questionId: Number(q.id),
+            selectedOptionId: selected == null ? null : Number(selected),
+          };
+        }),
+      };
+
+      const evalData = await fetchJson("/api/evaluate", { method: "POST", body: payload });
+      const data = {
+        score: Number(evalData?.correctAnswers || 0),
+        total: Number(evalData?.totalQuestions || questions.length),
+        results: Array.isArray(evalData?.results) ? evalData.results : [],
+      };
 
       setResult(data);
       if (progressStorageKey) {
@@ -243,7 +283,7 @@ export default function TestRunnerPage() {
         // ignore
       }
     }
-    router.replace("/");
+    router.replace("/assessment");
   }
 
   function onSelect(optionId) {

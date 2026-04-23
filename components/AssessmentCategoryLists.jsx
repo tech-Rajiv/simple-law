@@ -8,14 +8,6 @@ function classNames(...xs) {
   return xs.filter(Boolean).join(' ')
 }
 
-const CATEGORY_TITLES = {
-  safety: 'Safety',
-  'emotion-quotient': 'Emotion quotient',
-  'women-issue': "Women's issues",
-  'social-awareness': 'Social awareness',
-  'fitness-health': 'Fitness & health',
-}
-
 const CATEGORY_IMAGES = {
   safety: '/category/learn-safety.webp',
   emotion: '/category/learn-emotion.webp',
@@ -26,7 +18,6 @@ const CATEGORY_IMAGES = {
 }
 
 function titleFromKey(key) {
-  if (CATEGORY_TITLES[key]) return CATEGORY_TITLES[key]
   return String(key)
     .split('-')
     .filter(Boolean)
@@ -34,23 +25,25 @@ function titleFromKey(key) {
     .join(' ')
 }
 
-function makeTestSlug(categoryKey, test) {
-  const idPart = test?.id != null ? String(test.id) : String(test?.title || 'test')
-  return `${categoryKey}-${idPart}`
-}
-
-export default function AssessmentCategoryLists({ allAssesmentsData }) {
+export default function AssessmentCategoryLists({ allAssesmentsData, subjectsWithTests }) {
   const router = useRouter()
   const [confirmTest, setConfirmTest] = useState(null)
 
   const categories = useMemo(() => {
-    const obj = allAssesmentsData && typeof allAssesmentsData === 'object' ? allAssesmentsData : {}
-    return Object.entries(obj).map(([categoryKey, tests]) => ({
-      categoryKey,
-      title: titleFromKey(categoryKey),
-      tests: Array.isArray(tests) ? tests : [],
-    }))
-  }, [allAssesmentsData])
+    const rows = Array.isArray(subjectsWithTests) ? subjectsWithTests : []
+    return rows.map((row) => {
+      const subject = row?.subject || {}
+      const subjectId = subject?.id != null ? String(subject.id) : String(subject?.title || 'subject')
+      const title = subject?.title ? String(subject.title) : titleFromKey(subjectId)
+      const tests = Array.isArray(row?.tests) ? row.tests : []
+      return {
+        categoryKey: subjectId,
+        title,
+        subject,
+        tests,
+      }
+    })
+  }, [subjectsWithTests])
 
   function openConfirm(testSlug, title) {
     setConfirmTest({ slug: testSlug, title })
@@ -99,9 +92,14 @@ export default function AssessmentCategoryLists({ allAssesmentsData }) {
 
             <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {cat.tests.map((t) => {
-                const testSlug = makeTestSlug(cat.categoryKey, t)
-                const imageSrc = CATEGORY_IMAGES[t?.category] || CATEGORY_IMAGES[cat.categoryKey] || null
-                const n = Number(t?.numberOfQuestions || 0)
+                const testSlug = t?.id != null ? String(t.id) : String(t?.title || 'test')
+                const imageSrc =
+                  t?.thumbnail ||
+                  cat?.subject?.thumbnail ||
+                  CATEGORY_IMAGES[t?.category] ||
+                  CATEGORY_IMAGES[cat.categoryKey] ||
+                  null
+                const n = Number(t?.numberOfQuestions || t?.questionCount || 0)
 
                 return (
                   <button

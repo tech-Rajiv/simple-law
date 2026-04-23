@@ -398,9 +398,9 @@ export default function TestRunnerPage() {
                     const selectedOptionId = r?.selectedOptionId ?? answersByQuestionId[q.id] ?? null;
                     const correctOptionId = r?.correctOptionId ?? null;
                     const selectedText =
-                      q.options?.find((o) => o.id === selectedOptionId)?.text ?? "Not answered";
+                      q.options?.find((o) => String(o.id) === String(selectedOptionId))?.text ?? "Not answered";
                     const correctText =
-                      q.options?.find((o) => o.id === correctOptionId)?.text ?? "—";
+                      q.options?.find((o) => String(o.id) === String(correctOptionId))?.text ?? "—";
                     const isCorrect = r?.isCorrect ?? false;
 
                     return (

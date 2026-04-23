@@ -49,6 +49,7 @@ export default function AssessmentCategoryLists({
         title,
         subject,
         tests,
+        description: subject?.description || "",
       };
     });
   }, [subjectsWithTests]);
@@ -76,7 +77,7 @@ export default function AssessmentCategoryLists({
         return (
           <div
             key={cat.categoryKey}
-            className="rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)] sm:p-7 md:p-8"
+            className="rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 sm:p-7 md:p-8"
           >
             <div className="flex flex-col gap-4 border-b border-[color:var(--border-light)] pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
               <div className="min-w-0">
@@ -92,16 +93,16 @@ export default function AssessmentCategoryLists({
                   </span>
                 </div>
                 <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[color:var(--text-secondary)] sm:text-base">
-                  Choose a test to begin. You can leave and return later by
-                  bookmarking the page if your browser allows.
+                  {cat.description ||
+                    "Choose a test to begin. You can leave and return later by bookmarking the page if your browser allows."}
                 </p>
               </div>
             </div>
 
             <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {count === 0 ? (
-                <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)]">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br from-[color:var(--hover-bg)] to-[color:var(--bg-section)]">
+                <div className="overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)]">
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[color:var(--bg-section)]">
                     <div
                       className="absolute inset-0 flex items-center justify-center bg-[color:var(--bg-section)]"
                       aria-hidden="true"
@@ -143,20 +144,19 @@ export default function AssessmentCategoryLists({
                   );
 
                   return (
-                    <button
+                    <article
                       key={testSlug}
-                      type="button"
-                      onClick={() => openConfirm(testSlug, t?.title || "Test")}
-                      className={classNames(
-                        "group text-left",
-                        "flex h-full flex-col overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)]",
-                        "transition-all duration-300 hover:-translate-y-1 hover:border-[color:var(--color-primary)]/35 hover:shadow-[0_16px_40px_-12px_rgba(97,45,83,0.2)]",
-                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2",
-                      )}
+                      className="group overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                     >
-                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-gradient-to-br from-[color:var(--hover-bg)] to-[color:var(--bg-section)]">
-                        {imageSrc ? (
-                          <>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          openConfirm(testSlug, t?.title || "Test")
+                        }
+                        className="block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)]/40 focus-visible:ring-offset-2"
+                      >
+                        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[color:var(--bg-section)]">
+                          {imageSrc ? (
                             <Image
                               src={imageSrc}
                               alt={
@@ -165,70 +165,63 @@ export default function AssessmentCategoryLists({
                                   : `${cat.title} test`
                               }
                               fill
-                              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              className="object-cover transition duration-300 group-hover:scale-[1.02]"
                               priority={cat.categoryKey === "safety"}
                             />
+                          ) : (
                             <div
-                              className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"
+                              className="absolute inset-0 flex items-center justify-center bg-[color:var(--bg-section)]"
                               aria-hidden="true"
-                            />
-                          </>
-                        ) : (
-                          <div
-                            className="absolute inset-0 flex items-center justify-center bg-[color:var(--bg-section)]"
-                            aria-hidden="true"
-                          >
-                            <span className="text-sm text-[color:var(--text-muted)]">
-                              Image
-                            </span>
-                          </div>
-                        )}
-                        <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <div className="flex flex-wrap items-center gap-2">
+                            >
+                              <span className="text-sm text-[color:var(--text-muted)]">
+                                Image
+                              </span>
+                            </div>
+                          )}
+
+                          <div className="absolute left-3 top-3 flex flex-wrap gap-2">
                             {n > 0 ? (
-                              <span className="inline-flex rounded-full bg-white/95 px-2.5 py-1 text-xs font-semibold text-[color:var(--text-primary)] shadow-sm backdrop-blur-sm">
+                              <span className="inline-flex items-center rounded-full bg-black/40 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                                 {n} questions
                               </span>
                             ) : null}
                             {t?.onlyWomen ? (
-                              <span className="inline-flex rounded-full bg-[color:var(--active-bg)] px-2.5 py-1 text-xs font-semibold text-[color:var(--color-primary)] ring-1 ring-[color:var(--color-primary)]/20">
+                              <span className="inline-flex items-center rounded-full bg-black/40 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                                 Women
                               </span>
                             ) : null}
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex flex-1 flex-col p-5">
-                        <h3 className="text-lg font-semibold leading-snug text-[color:var(--text-primary)] group-hover:text-[color:var(--color-primary)] sm:text-xl">
-                          {t?.title || "Test"}
-                        </h3>
-                        {t?.description ? (
-                          <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-[color:var(--text-secondary)]">
-                            {t.description}
+                        <div className="p-5">
+                          <h3 className="text-lg font-semibold text-[color:var(--text-primary)]">
+                            {t?.title || "Test"}
+                          </h3>
+                          <p className="mt-2 line-clamp-3 text-sm text-[color:var(--text-secondary)]">
+                            {t?.description
+                              ? t.description
+                              : n > 0
+                                ? "Short multiple-choice check — results at the end."
+                                : "Knowledge check"}
                           </p>
-                        ) : n > 0 ? (
-                          <p className="mt-2 flex-1 text-sm text-[color:var(--text-secondary)]">
-                            Short multiple-choice check — results at the end.
-                          </p>
-                        ) : (
-                          <p className="mt-2 flex-1 text-sm text-[color:var(--text-secondary)]">
-                            Knowledge check
-                          </p>
-                        )}
 
-                        <div className="mt-5 flex items-center justify-between gap-3 border-t border-[color:var(--border-light)] pt-4">
-                          <span className="text-xs font-medium text-[color:var(--text-muted)]">
-                            {cat.title}
-                          </span>
-                          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--color-primary)] transition-transform duration-200 group-hover:translate-x-0.5">
-                            Start
-                            <span aria-hidden="true">→</span>
-                          </span>
+                          <div className="mt-4 rounded-xl bg-[color:var(--bg-section)] p-4">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-[color:var(--text-muted)]">
+                              Ready when you are
+                            </p>
+                            <div className="mt-3 flex items-center justify-between gap-3">
+                              <span className="text-sm text-[color:var(--text-secondary)]">
+                                {cat.title}
+                              </span>
+                              <span className="btn-primary inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold">
+                                Start test →
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </button>
+                      </button>
+                    </article>
                   );
                 })
               )}

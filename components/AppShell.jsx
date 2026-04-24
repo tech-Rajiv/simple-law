@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { usePathname } from "next/navigation";
 import Header from './Header'
 import Sidebar from './Sidebar'
-import Breadcrumbs from './Breadcrumbs'
+// Breadcrumbs removed (not used)
 import Footer from './Footer'
 
 export default function AppShell({ children }) {
@@ -87,8 +87,7 @@ export default function AppShell({ children }) {
                 </aside> */}
 
                 <main className="min-w-0 flex-1">
-                    <div className="mx-auto w-full max-w-[1500px] px-5 py-6 md:px-6 md:py-8">
-                        <Breadcrumbs />
+                    <div className="mx-auto w-full max-w-6xl px-5 py-6 md:px-6 md:py-8">
                         <div className="space-y-8">{children}</div>
                     </div>
                 </main>
@@ -97,7 +96,6 @@ export default function AppShell({ children }) {
             {/* Mobile layout: drawer overlays content */}
             <div className="mx-auto flex w-full max-w-6xl flex-1 px-5 py-6 md:hidden">
                 <main className="min-w-0 flex-1">
-                    <Breadcrumbs />
                     <div className="space-y-8">{children}</div>
                 </main>
             </div>

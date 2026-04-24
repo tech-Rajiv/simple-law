@@ -13,6 +13,7 @@ import { useCallback, useEffect, useId, useState } from 'react'
 export default function TopicImageCarousel({ slides = [], heading = 'Illustrations' }) {
   const id = useId()
   const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
   const count = slides.length
 
   const go = useCallback(
@@ -23,6 +24,15 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
     },
     [count]
   )
+
+  useEffect(() => {
+    if (count < 2) return
+    if (paused) return
+    const t = window.setInterval(() => {
+      setIndex((prev) => ((prev + 1) % count + count) % count)
+    }, 4500)
+    return () => window.clearInterval(t)
+  }, [count, paused])
 
   useEffect(() => {
     function onKey(e) {
@@ -41,6 +51,10 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
       className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-5 shadow-[var(--shadow-soft)] md:p-6"
       aria-roledescription="carousel"
       aria-label={heading}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
     >
       {heading ? (
         <h2 className="text-lg font-semibold text-[color:var(--text-primary)]">{heading}</h2>
@@ -62,14 +76,15 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                 aria-label={`${i + 1} of ${count}`}
                 aria-hidden={i !== index}
               >
-                <div className="relative aspect-[16/10] w-full md:max-w-[85%] md:mx-auto">
+                <div className="relative aspect-[16/10] w-full md:mx-auto md:max-w-[760px] md:aspect-[16/9] md:max-h-[420px]">
                   {slide.imageSrc ? (
                     <Image
                       src={slide.imageSrc}
                       alt={slide.alt || ''}
                       fill
-                      className="object-contain"
-                      sizes="(max-width: 768px) 100vw, 800px"
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 760px"
+                      quality={90}
                     />
                   ) : (
                     <div className="flex h-full min-h-[200px] w-full flex-col items-center justify-center gap-2 bg-[color:var(--bg-topic-serious)] px-6 text-center md:min-h-[240px]">
@@ -96,7 +111,10 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
               <button
                 type="button"
                 className="rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)]"
-                onClick={() => go(index - 1)}
+                onClick={() => {
+                  setPaused(true)
+                  go(index - 1)
+                }}
                 aria-controls={`${id}-track`}
                 aria-label="Previous slide"
               >
@@ -105,7 +123,10 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
               <button
                 type="button"
                 className="rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)]"
-                onClick={() => go(index + 1)}
+                onClick={() => {
+                  setPaused(true)
+                  go(index + 1)
+                }}
                 aria-controls={`${id}-track`}
                 aria-label="Next slide"
               >
@@ -120,7 +141,10 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                   role="tab"
                   aria-selected={i === index}
                   aria-label={`Go to slide ${i + 1}`}
-                  onClick={() => go(i)}
+                  onClick={() => {
+                    setPaused(true)
+                    go(i)
+                  }}
                   className={[
                     'h-2.5 w-2.5 rounded-full transition-colors',
                     i === index ? 'bg-[color:var(--color-primary)]' : 'bg-[color:var(--border-light)] hover:bg-[color:var(--text-muted)]',

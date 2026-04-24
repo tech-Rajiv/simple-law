@@ -1,13 +1,8 @@
 import HeroSection from "@/components/HeroSection";
-import QuizLists from "@/components/QuizLists";
 import ExploreTopics from "@/components/home/ExploreTopics";
 import FeaturedSection from "@/components/home/FeaturedSection";
-import HomeClarity from "@/components/home/HomeClarity";
-import HomeFaq from "@/components/home/HomeFaq";
-import HomeFinalCta from "@/components/home/HomeFinalCta";
-import HomeFinalCtaV2 from "@/components/home/HomeFinalCtaV2";
-import HomeHero from "@/components/home/HomeHero";
 import HomeHowItWorks from "@/components/home/HomeHowItWorks";
+import { TopicGradientBand } from "@/components/topic-guide";
 
 export default function Home() {
   return (
@@ -15,6 +10,11 @@ export default function Home() {
       <HeroSection />
       <HomeHowItWorks />
       <ExploreTopics />
+      <TopicGradientBand
+          eyebrow={"Emotional Intelligence"}
+          title={"Emotional Intelligence"}
+          body={"Emotional Intelligence"}
+        />
       <FeaturedSection />
     </div>
   );

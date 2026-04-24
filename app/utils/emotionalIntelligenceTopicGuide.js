@@ -9,10 +9,10 @@ function placeholderImageLessons(topicTitle) {
       imageSrc: null,
       alt: '',
       teachesHeading: 'What does this image teach us?',
-      summary: `[Placeholder] In one sentence: the key lesson this picture is meant to reinforce for “${topicTitle}”. Replace with your real takeaway when you add the image.`,
+      summary: `Add a one-sentence takeaway for “${topicTitle}” that this image is meant to reinforce.`,
       paragraphs: [
-        `[Placeholder] Expand here with 2–4 sentences. Example uses: labelled hand gestures for communication, posture diagrams for confidence, or (in safety content) simple visuals that show appropriate vs inappropriate touch — always paired with age-appropriate language and local safeguarding guidance.`,
-        `[Placeholder] Add context: when this cue matters, common misreadings, and what a constructive response looks like in real life.`,
+        'Add 2–4 short sentences explaining what the learner should notice and how to use it in real life.',
+        'Include context: when this matters, common misreadings, and what a constructive response looks like.',
       ],
       figureNote: 'Optional caption or source line for the image (add when you publish the visual).',
     },
@@ -20,41 +20,41 @@ function placeholderImageLessons(topicTitle) {
       imageSrc: null,
       alt: '',
       teachesHeading: 'What does this image teach us?',
-      summary: `[Placeholder] Second visual lesson for “${topicTitle}” — e.g. a before/after, a sequence, or a contrasting example.`,
+      summary: `Second visual lesson for “${topicTitle}” — e.g. a before/after, sequence, or contrasting example.`,
       paragraphs: [
-        `[Placeholder] Describe what the learner should notice first, then what it implies for behaviour or boundaries.`,
-        `[Placeholder] You can link this block to culture-specific norms or workplace vs social settings if relevant.`,
+        'Describe what the learner should notice first, then what it implies for behaviour.',
+        'If relevant, note how the cue changes across settings (school, work, friends, online).',
       ],
     },
     {
       imageSrc: null,
       alt: '',
       teachesHeading: 'What does this image teach us?',
-      summary: `[Placeholder] Third teaching image — useful for checklists, maps of “zones”, or step-by-step stills.`,
+      summary: `Third teaching image — useful for checklists, maps, or step-by-step stills.`,
       paragraphs: [
-        `[Placeholder] Use this section for deeper interpretation: why the signal appears, how stress or power dynamics change it, and how to practise safely.`,
+        'Use this section for deeper interpretation: why it happens, how stress changes it, and how to practise safely.',
       ],
     },
   ]
 }
 
 function buildBaseGuide(topicTitle) {
-  const sampleDos = [
-    `[Sample] Prepare one opening line you can reuse in similar situations.`,
-    `[Sample] Watch for mismatch between your words and tone.`,
-    `[Sample] Repair quickly if you slip — short apologies rebuild trust.`,
+  const defaultDos = [
+    'Prepare one simple sentence you can reuse in similar situations.',
+    'Pay attention to tone and body language, not only words.',
+    'Repair quickly if you slip — short, specific apologies rebuild trust.',
   ]
-  const sampleDonts = [
-    `[Sample] Do not assume silence always means agreement.`,
-    `[Sample] Avoid public call-outs when a private nudge would work.`,
-    `[Sample] Do not skip rest and expect the same level of control every day.`,
+  const defaultDonts = [
+    'Do not assume silence always means agreement.',
+    'Avoid public call-outs when a private nudge would work.',
+    'Do not skip rest and expect the same level of control every day.',
   ]
 
   return {
     takeaways: [
-      `[Sample] You can replace these bullets with outcomes specific to “${topicTitle}”.`,
-      `[Sample] One concrete behaviour to try this week.`,
-      `[Sample] One sign you are making progress (self-report or feedback).`,
+      `A clear definition of “${topicTitle}” in real life.`,
+      'One concrete behaviour to try this week.',
+      'One simple sign you are making progress (self-check or feedback).',
     ],
     teachStackTitle: 'Learn from the visuals',
     teachStackIntro: `Each block below reserves space for an image and explains what it teaches. Swap in photography, diagrams, or illustrations as you build out “${topicTitle}”.`,
@@ -69,83 +69,86 @@ function buildBaseGuide(topicTitle) {
     calloutTip: {
       variant: 'tip',
       title: 'Small reps beat perfect plans',
-      body: `[Sample] Pick one idea from “${topicTitle}” and repeat it in three short real-world tries before adding more. Replace this copy with your preferred coaching line.`,
+      body: `Pick one idea from “${topicTitle}” and repeat it in three short real-world tries before adding more.`,
     },
     calloutCaution: {
       variant: 'caution',
       title: 'Context matters',
-      body: `[Sample] Body language and social norms vary by culture and setting. Encourage readers to interpret signals with humility — and to prioritise consent, safety, and workplace policies. Replace with your disclaimer if needed.`,
+      body: 'Body language and social norms vary by culture and setting. Interpret signals with humility and prioritise consent, safety, and policies in your environment.',
     },
     scenariosTitle: 'Put it into practice',
     scenarios: [
       {
-        situation: `[Sample] You are tired and worried you will come across cold during “${topicTitle}”.`,
-        approach: `[Sample] Name it briefly (“I’m a bit low on energy today”) and keep one warm cue steady — voice pace or eye contact. Replace with a scenario from your audience’s world.`,
+        situation: `You are tired and worried you will come across cold during “${topicTitle}”.`,
+        approach:
+          'Name it briefly (“I’m low on energy today”) and keep one warm cue steady — voice pace, eye contact, or a short check-in question.',
       },
       {
-        situation: `[Sample] Someone misreads your intent and responds sharply.`,
-        approach: `[Sample] Pause, reflect their words, and ask one clarifying question before defending yourself. Replace with your script.`,
+        situation: 'Someone misreads your intent and responds sharply.',
+        approach:
+          'Pause, reflect what you heard (“Sounds like you mean…”), then ask one clarifying question before defending yourself.',
       },
     ],
     mistakesTitle: 'Common pitfalls',
     mistakes: [
       {
-        title: `[Sample] Over-focusing on performance`,
-        body: `[Sample] Trying to “perform” confidence can look stiff. Aim for clear and kind instead of perfect. Replace with a pitfall specific to ${topicTitle}.`,
+        title: 'Over-focusing on performance',
+        body: `Trying to “perform” the skill can look stiff. Aim for clear and kind instead of perfect while you practise “${topicTitle}”.`,
       },
       {
-        title: `[Sample] Ignoring your own stress signals`,
-        body: `[Sample] Skills slip when sleep or hunger are low. Replace with your note on regulation.`,
+        title: 'Ignoring your own stress signals',
+        body: 'Skills slip when sleep, hunger, or overload is high. Reduce intensity first, then apply the technique.',
       },
     ],
     dosDontsTitle: 'Quick rules of thumb',
-    dos: sampleDos,
-    donts: sampleDonts,
+    dos: defaultDos,
+    donts: defaultDonts,
     /** Visual + paired lists (reuse for women’s safety, harassment, etc.) */
     imageDoDont: {
       title: 'What to do — and what to avoid',
-      intro: `[Placeholder] Use the image for a diagram, photo sequence, or labelled illustration. On topics like harassment or boundaries, replace this copy with age-appropriate, locally accurate safeguarding language.`,
+      intro: 'Use the image for a diagram, photo sequence, or labelled illustration that matches the “do” and “don’t” lists.',
       imageSrc: null,
       imageAlt: '',
       imageCaption: null,
       doHeading: 'What to do',
       dontHeading: 'What not to do',
-      dos: sampleDos,
-      donts: sampleDonts,
+      dos: defaultDos,
+      donts: defaultDonts,
     },
     practiceTitle: 'Try this over the next week',
     practiceSteps: [
-      `[Sample] Day 1–2: Observe without changing behaviour — note one pattern.`,
-      `[Sample] Day 3–4: Apply one technique from this topic once per day.`,
-      `[Sample] Day 5–7: Ask for feedback from someone you trust or reflect in a short journal entry.`,
+      'Day 1–2: Observe without changing behaviour — note one pattern.',
+      'Day 3–4: Apply one technique from this topic once per day.',
+      'Day 5–7: Ask for feedback from someone you trust or reflect in a short journal entry.',
     ],
     glossaryTitle: 'Key terms (editable)',
     glossaryEntries: [
       {
-        term: `[Sample] Term one`,
-        definition: `[Sample] Definition placeholder — tie to “${topicTitle}” in your final copy.`,
+        term: 'Term 1',
+        definition: `Add a simple definition tied to “${topicTitle}”.`,
       },
       {
-        term: `[Sample] Term two`,
-        definition: `[Sample] Another definition slot for jargon you want to demystify.`,
+        term: 'Term 2',
+        definition: 'Add a second definition for any jargon you want to demystify.',
       },
       {
-        term: `[Sample] Term three`,
-        definition: `[Sample] Optional third entry; add or remove rows in the topic guide merge.`,
+        term: 'Term 3 (optional)',
+        definition: 'Add a third definition if needed (or remove this row).',
       },
     ],
     faqTitle: 'Questions people often ask',
     faqItems: [
       {
-        question: `[Sample] How long until I see results?`,
-        answer: `[Sample] Many people notice small shifts in one to two weeks of deliberate practice. Replace with evidence-based guidance if you cite research.`,
+        question: 'How long until I see results?',
+        answer: 'Many people notice small shifts in 1–2 weeks of deliberate practice. Consistency matters more than intensity.',
       },
       {
-        question: `[Sample] What if I feel worse before I feel better?`,
-        answer: `[Sample] Paying attention to habits can temporarily increase self-criticism. Balance awareness with self-compassion and professional support if mood or safety are affected.`,
+        question: 'What if I feel worse before I feel better?',
+        answer:
+          'Paying attention to habits can briefly increase self-criticism. Balance awareness with self-compassion, and seek support if mood or safety is affected.',
       },
     ],
-    furtherReadingBody: `[Placeholder] Add links to books, articles, helplines, or institutional resources you trust. This block is intentionally dashed so it is obvious it is unfinished.`,
+    furtherReadingBody: 'Add links to books, articles, or resources you trust.',
   }
 }
 

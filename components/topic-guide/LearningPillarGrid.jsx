@@ -9,6 +9,10 @@
 export default function LearningPillarGrid({ title, items = [], className = '' }) {
   if (!items.length) return null
 
+  const lgCols =
+    items.length >= 4 ? 'lg:grid-cols-4' : items.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'
+  const gridClass = `grid gap-4 sm:grid-cols-2 ${lgCols} lg:gap-6`
+
   return (
     <section
       className={`rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-6 shadow-[var(--shadow-soft)] md:p-8 ${className}`}
@@ -24,9 +28,7 @@ export default function LearningPillarGrid({ title, items = [], className = '' }
       ) : null}
       <ul
         className={
-          title
-            ? 'mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6'
-            : 'grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6'
+          title ? `mt-6 ${gridClass}` : gridClass
         }
       >
         {items.map((item, i) => (

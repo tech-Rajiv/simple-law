@@ -1,48 +1,47 @@
-import { notFound } from 'next/navigation'
+import { notFound } from "next/navigation";
 import {
   TopicDetailPageHeader,
-  TopicDosDonts,
-  TopicFurtherReading,
-  TopicGuideCallout,
-  TopicGlossaryList,
   TopicImageCarousel,
   TopicImageDoDontSplit,
-  TopicImageTeachStack,
-  TopicKeyTakeaways,
-  TopicMistakesList,
-  TopicPointsSection,
-  TopicPracticeChecklist,
+  TopicTextLessonStack,
+  TopicWhatMostPeopleDo,
+  TopicPracticePlan,
   TopicScenarioCards,
   TopicSimpleFaq,
   TopicStepRibbon,
-} from '@/components/topic-guide'
+} from "@/components/topic-guide";
 import {
   getAllEiSlugs,
   getEiTopic,
-} from '@/app/utils/emotionalIntelligenceContent'
-import { getEiTopicGuide } from '@/app/utils/emotionalIntelligenceTopicGuide'
+} from "@/app/utils/emotionalIntelligenceContent";
+import { getEiTopicGuide } from "@/app/utils/emotionalIntelligenceTopicGuide";
 
 export function generateStaticParams() {
-  return getAllEiSlugs().map((slug) => ({ slug }))
+  return getAllEiSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params
-  const topic = getEiTopic(slug)
-  if (!topic) return { title: 'Topic not found' }
+  const { slug } = await params;
+  const topic = getEiTopic(slug);
+  if (!topic) return { title: "Topic not found" };
   return {
     title: `${topic.title} | Emotional intelligence`,
     description: topic.teaser,
-  }
+  };
 }
 
 export default async function EmotionalIntelligenceTopicPage({ params }) {
-  const { slug } = await params
-  const topic = getEiTopic(slug)
-  if (!topic) notFound()
+  const { slug } = await params;
+  const topic = getEiTopic(slug);
+  if (!topic) notFound();
 
-  const guide = getEiTopicGuide(topic)
-  const slides = Array.from({ length: topic.carouselCount }, () => ({ imageSrc: null }))
+  const guide = getEiTopicGuide(topic);
+  const slides =
+    topic.carouselImages &&
+    Array.isArray(topic.carouselImages) &&
+    topic.carouselImages.length
+      ? topic.carouselImages
+      : Array.from({ length: topic.carouselCount }, () => ({ imageSrc: null }));
 
   return (
     <div className="space-y-8 pb-10 md:space-y-10">
@@ -53,25 +52,37 @@ export default async function EmotionalIntelligenceTopicPage({ params }) {
         description={topic.teaser}
       />
 
-      <TopicKeyTakeaways title="At a glance" items={guide.takeaways} />
-
-      <TopicStepRibbon title={guide.stepRibbonTitle} steps={guide.stepRibbonSteps} />
-
       <TopicImageCarousel slides={slides} heading="Visual overview" />
 
-      <TopicImageTeachStack
-        sectionTitle={guide.teachStackTitle}
-        sectionIntro={guide.teachStackIntro}
+      <TopicPracticePlan
+        title={guide.practiceTitle}
+        steps={guide.practiceSteps}
+      />
+      {topic.mostPeopleDo ? (
+        <TopicWhatMostPeopleDo
+          title={topic.mostPeopleDo.title}
+          paragraphs={topic.mostPeopleDo.paragraphs}
+          patterns={topic.mostPeopleDo.patterns}
+          examples={topic.mostPeopleDo.examples}
+          closing={topic.mostPeopleDo.closing}
+        />
+      ) : null}
+
+      {/* <TopicPracticePlan
+        title={guide.practiceTitle}
+        steps={guide.practiceSteps}
+      /> */}
+
+      <TopicTextLessonStack
+        title={guide.teachStackTitle}
+        intro={guide.teachStackIntro}
         lessons={guide.imageLessons}
       />
 
-      <TopicGuideCallout
-        variant={guide.calloutTip.variant}
-        title={guide.calloutTip.title}
-        body={guide.calloutTip.body}
+      <TopicStepRibbon
+        title={guide.stepRibbonTitle}
+        steps={guide.stepRibbonSteps}
       />
-
-      <TopicPointsSection points={topic.points} heading="Core ideas in depth" />
 
       {guide.imageDoDont ? (
         <TopicImageDoDontSplit
@@ -87,25 +98,12 @@ export default async function EmotionalIntelligenceTopicPage({ params }) {
         />
       ) : null}
 
-      <TopicScenarioCards title={guide.scenariosTitle} scenarios={guide.scenarios} />
-
-      <TopicDosDonts title={guide.dosDontsTitle} dos={guide.dos} donts={guide.donts} />
-
-      <TopicMistakesList title={guide.mistakesTitle} mistakes={guide.mistakes} />
-
-      <TopicPracticeChecklist title={guide.practiceTitle} steps={guide.practiceSteps} />
-
-      <TopicGlossaryList title={guide.glossaryTitle} entries={guide.glossaryEntries} />
-
-      <TopicSimpleFaq title={guide.faqTitle} items={guide.faqItems} />
-
-      <TopicGuideCallout
-        variant={guide.calloutCaution.variant}
-        title={guide.calloutCaution.title}
-        body={guide.calloutCaution.body}
+      <TopicScenarioCards
+        title={guide.scenariosTitle}
+        scenarios={guide.scenarios}
       />
 
-      <TopicFurtherReading body={guide.furtherReadingBody} />
+      <TopicSimpleFaq title={guide.faqTitle} items={guide.faqItems} />
     </div>
-  )
+  );
 }

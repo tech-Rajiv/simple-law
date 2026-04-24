@@ -53,7 +53,7 @@ export default function TopicImageDoDontSplit({
                 src={imageSrc}
                 alt={imageAlt || title}
                 fill
-                className="object-contain object-center"
+                className="object-cover object-center"
                 sizes="(max-width: 1024px) 100vw, 400px"
               />
             ) : (

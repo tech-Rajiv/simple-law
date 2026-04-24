@@ -54,7 +54,7 @@ export default function SingleTopicCard({ topic, basePath = '' }) {
 
         <div className="mt-4">
           <span className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] transition-colors hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary)]">
-            Read safety <span aria-hidden="true">→</span>
+            Read more <span aria-hidden="true">→</span>
           </span>
         </div>
       </div>

@@ -5,21 +5,21 @@
 
 /** Shown under the main hero heading */
 export const emotionalIntelligenceHeroSubtitle =
-  'Build skills you can practise every day: self-awareness, empathy, communication, and calm under pressure — with clear guides and a path to check what you know.'
+  'Learn to stay calm, understand your mind, and communicate better — with simple steps, practice plans, and clear do/don’ts.'
 
 /** CTA in hero — links to site assessments */
 export const emotionalIntelligenceAssessmentCta = {
   href: '/assessment',
-  label: 'Take an emotional intelligence test',
+  label: 'Go to assessments',
 }
 
 export const emotionalIntelligenceHeroEyebrow = 'Learning hub'
 
 export const emotionalIntelligenceHeroCtaHint =
-  'Opens your assessments — pick emotional intelligence or browse everything in one place.'
+  'Opens your assessments — browse everything in one place.'
 
 export const emotionalIntelligenceHeroCtaPanelBody =
-  'See where you are strong today and what to practise next — alongside your other assessments.'
+  'Check what you know today and see what to practise next.'
 
 export const emotionalIntelligenceIntro = {
   title: 'What is emotional intelligence?',

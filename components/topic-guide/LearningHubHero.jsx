@@ -24,8 +24,17 @@ export default function LearningHubHero({
   ctaHint,
   ctaPanelTitle = 'Next step',
   ctaPanelDescription,
+  dense = true,
   className = '',
 }) {
+  const copyPadding = dense
+    ? 'px-6 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-7'
+    : 'px-6 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14'
+
+  const panelPadding = dense
+    ? 'px-6 py-5 sm:px-8 sm:py-6 lg:px-8 lg:py-7'
+    : 'px-6 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-14'
+
   return (
     <section
       className={[
@@ -46,7 +55,7 @@ export default function LearningHubHero({
 
       <div className="relative grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-stretch">
         {/* Copy */}
-        <div className="flex flex-col justify-center px-6 py-10 sm:px-8 sm:py-12 lg:px-12 lg:py-14">
+        <div className={`flex flex-col justify-center ${copyPadding}`}>
           <div className="max-w-xl">
             {eyebrow ? (
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-primary)]">
@@ -64,7 +73,12 @@ export default function LearningHubHero({
               {title}
             </h1>
             {subtitle ? (
-              <p className="mt-5 text-base leading-relaxed text-[color:var(--text-secondary)] sm:text-lg sm:leading-relaxed">
+              <p
+                className={[
+                  'text-base leading-relaxed text-[color:var(--text-secondary)] sm:text-lg sm:leading-relaxed',
+                  dense ? 'mt-3' : 'mt-5',
+                ].join(' ')}
+              >
                 {subtitle}
               </p>
             ) : null}
@@ -72,7 +86,9 @@ export default function LearningHubHero({
         </div>
 
         {/* CTA panel — fixed width on large screens so the button never floats in empty space */}
-        <div className="relative flex flex-col justify-center border-t border-[color:var(--border-light)] bg-gradient-to-br from-[color:var(--color-primary)] via-[#5c2d4f] to-[#3d1f36] px-6 py-8 sm:px-8 sm:py-10 lg:border-l lg:border-white/10 lg:border-t-0 lg:px-10 lg:py-14">
+        <div
+          className={`relative flex flex-col justify-center border-t border-[color:var(--border-light)] bg-gradient-to-br from-[color:var(--color-primary)] via-[#5c2d4f] to-[#3d1f36] ${panelPadding} lg:border-l lg:border-white/10 lg:border-t-0`}
+        >
           <div
             className="pointer-events-none absolute inset-0 opacity-40"
             style={{
@@ -90,7 +106,10 @@ export default function LearningHubHero({
             </div>
             <Link
               href={ctaHref}
-              className="group inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 text-center text-base font-semibold text-[color:var(--color-primary)] shadow-lg transition-[transform,box-shadow] duration-200 hover:bg-white hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.99] sm:text-[1.05rem]"
+              className={[
+                'group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white text-center font-semibold text-[color:var(--color-primary)] shadow-lg transition-[transform,box-shadow] duration-200 hover:bg-white hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.99]',
+                dense ? 'min-h-[46px] px-5 py-3 text-sm sm:text-base' : 'min-h-[52px] px-6 py-4 text-base sm:text-[1.05rem]',
+              ].join(' ')}
             >
               <span>{ctaLabel}</span>
               <span

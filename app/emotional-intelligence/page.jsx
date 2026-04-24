@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { LearningHubHero, TopicPullQuoteCard } from "@/components/topic-guide";
 import TopicsCards from "@/components/shared/TopicsCards";
 import YtVideocard from "@/components/shared/YtVideocard";
 import FaqSections from "@/components/shared/FaqSections";
-import checkIcon from "@/icons/check.png";
+import WhatYouWillLearnSection from "@/components/shared/WhatYouWillLearnSection";
 import {
   emotionalIntelligenceAssessmentCta,
   emotionalIntelligenceHeroCtaHint,
@@ -104,34 +103,12 @@ export default function EmotionalIntelligencePage() {
         ctaPanelDescription={emotionalIntelligenceHeroCtaPanelBody}
         ctaHint={emotionalIntelligenceHeroCtaHint}
       />
-      <section className="relative overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-6 shadow-[var(--shadow-soft)] md:p-8">
-        <div
-          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[color:var(--color-primary)]/[0.08] blur-3xl"
-          aria-hidden="true"
-        />
-        <h2 className="text-xl font-semibold tracking-tight text-[color:var(--text-primary)] md:text-2xl">
-          What you will learn in every topic
-        </h2>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[color:var(--text-secondary)] md:text-base">
-          Practical tools you can use immediately — built to help you act with
-          clarity in real situations.
-        </p>
 
-        <div className="mt-5 rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-page)] p-4 md:p-5">
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {whatYouWillLearn.map((item) => (
-              <li key={item} className="flex items-start gap-2.5">
-                <span className="mt-0.5 shrink-0">
-                  <Image src={checkIcon} alt="" width={16} height={16} />
-                </span>
-                <span className="text-sm text-[color:var(--text-secondary)] md:text-base">
-                  {item}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <WhatYouWillLearnSection
+        title="What you will learn in every topic"
+        subtitle="Practical tools you can use immediately — built to help you act with clarity in real situations."
+        items={whatYouWillLearn}
+      />
       <TopicsCards topics={topicsLists} basePath="/emotional-intelligence" />
 
       <section className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-6 text-center shadow-[var(--shadow-soft)] md:p-8">

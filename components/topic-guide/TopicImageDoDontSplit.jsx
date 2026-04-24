@@ -46,7 +46,7 @@ export default function TopicImageDoDontSplit({
       ) : null}
 
       <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-stretch lg:justify-between lg:gap-10">
-        <div className="w-full shrink-0 lg:max-w-[min(100%,400px)]">
+        <div className="w-full shrink-0 lg:max-w-[min(100%,320px)]">
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[color:var(--hover-bg)]">
             {imageSrc ? (
               <Image
@@ -54,7 +54,7 @@ export default function TopicImageDoDontSplit({
                 alt={imageAlt || title}
                 fill
                 className="object-cover object-center"
-                sizes="(max-width: 1024px) 100vw, 400px"
+                sizes="(max-width: 1024px) 100vw, 320px"
               />
             ) : (
               <div

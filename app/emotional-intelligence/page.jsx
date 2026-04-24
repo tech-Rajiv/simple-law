@@ -1,10 +1,9 @@
-import {
-  LearningHubHero,
-  LearningContentSections,
-  TopicHubIntro,
-  TopicPullQuoteCard,
-} from "@/components/topic-guide";
+import Image from "next/image";
+import { LearningHubHero, TopicPullQuoteCard } from "@/components/topic-guide";
 import TopicsCards from "@/components/shared/TopicsCards";
+import YtVideocard from "@/components/shared/YtVideocard";
+import FaqSections from "@/components/shared/FaqSections";
+import checkIcon from "@/icons/check.png";
 import {
   emotionalIntelligenceAssessmentCta,
   emotionalIntelligenceHeroCtaHint,
@@ -21,27 +20,12 @@ export const metadata = {
 };
 
 export default function EmotionalIntelligencePage() {
-  const intro = {
-    title: "Emotional Intelligence (EQ)",
-    paragraphs: [
-      "Emotional Intelligence (EQ) is the ability to understand, manage, and use your emotions in a way that helps you navigate life more effectively. It’s not about suppressing feelings or always staying calm—it’s about being aware of what you feel, why you feel it, and how your emotions influence your decisions, behavior, and relationships.",
-      "In everyday life, we react far more emotionally than we realize. A small comment can ruin your mood. A stressful situation can lead to poor decisions. A misunderstanding can damage relationships. Emotional intelligence helps you pause, understand what’s happening internally, and respond instead of reacting impulsively.",
-      "Awareness is the foundation of emotional intelligence. When you become aware of your thoughts, emotional triggers, and patterns, you start gaining control over your life. Instead of being driven by emotions, you begin to guide them. This leads to better decisions, healthier relationships, and a more stable mindset.",
-      "In today’s fast-moving and highly connected world, emotional intelligence is not optional—it’s essential. Whether it’s dealing with stress, understanding people, avoiding manipulation, or improving communication, EQ plays a major role in personal growth and real-world success.",
-      "Developing emotional intelligence doesn’t require special talent. It’s a skill that can be built with practice—by observing yourself, reflecting on situations, and learning how emotions work both in you and in others.",
-    ],
-  };
-
-  const whatYouGetSections = [
-    {
-      title: "What you’ll get inside each topic",
-      paragraphs: [
-        "A simple, practical breakdown — so you understand what’s happening in real life (not just theory).",
-        "A clear step-by-step formula you can follow in the moment, plus a 7‑day practice plan to build the habit.",
-        "Quick rules of thumb (Do / Don’t) and common mistakes — so you can avoid the usual traps and improve faster.",
-        "FAQs and real examples — so you know what to do when the situation feels confusing.",
-      ],
-    },
+  const whatYouWillLearn = [
+    "Simple steps formula (easy to follow in real situations)",
+    "7‑day practice plan to build the habit",
+    "Quick rules of thumb (Do / Don’t) to avoid mistakes",
+    "Real examples + FAQs for confusing situations",
+    "Visual carousel + short explanations to make it stick",
   ];
 
   const topicsLists = [
@@ -68,6 +52,47 @@ export default function EmotionalIntelligencePage() {
     },
   ];
 
+  const ytdetails = {
+    title: "Emotional Intelligence Video",
+    description:
+      "Watch this to quickly understand emotional intelligence and how to use it in real life.",
+    ytVideoUrl: "https://youtu.be/D6_J7FfgWVc?si=5_NV6VzHJ9nruXmK",
+  };
+
+  const FAQHeading = {
+    title: "FAQ",
+    description:
+      "Quick answers to common questions about emotional intelligence and how to practise it.",
+  };
+
+  const FAQLists = [
+    {
+      question: "What is emotional intelligence (EQ) in simple words?",
+      answer:
+        "It’s the skill of noticing what you feel, understanding why, and choosing how you respond—so emotions help you instead of controlling you.",
+    },
+    {
+      question: "Is EQ more important than IQ?",
+      answer:
+        "They’re different. IQ helps with learning and problem-solving. EQ helps you handle pressure, communicate well, and build trust—often the difference in real-life success.",
+    },
+    {
+      question: "How can I improve EQ quickly?",
+      answer:
+        "Start small: pause before reacting, name what you feel, and practise one habit for 7 days. Consistency matters more than intensity.",
+    },
+    {
+      question: "Why do I overreact even when I know better?",
+      answer:
+        "Because stress can hijack your thinking. When emotions rise, your brain defaults to fast habits. The pause + breathing steps help you regain control.",
+    },
+    {
+      question: "Which topic should I start with?",
+      answer:
+        "Pick the one that matches your real life right now: calm under pressure, understanding your mind, or influence & communication. You’ll learn faster when you apply it immediately.",
+    },
+  ];
+
   return (
     <div className="space-y-8 pb-10 md:space-y-10">
       <LearningHubHero
@@ -79,12 +104,54 @@ export default function EmotionalIntelligencePage() {
         ctaPanelDescription={emotionalIntelligenceHeroCtaPanelBody}
         ctaHint={emotionalIntelligenceHeroCtaHint}
       />
+      <section className="relative overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-6 shadow-[var(--shadow-soft)] md:p-8">
+        <div
+          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[color:var(--color-primary)]/[0.08] blur-3xl"
+          aria-hidden="true"
+        />
+        <h2 className="text-xl font-semibold tracking-tight text-[color:var(--text-primary)] md:text-2xl">
+          What you will learn in every topic
+        </h2>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[color:var(--text-secondary)] md:text-base">
+          Practical tools you can use immediately — built to help you act with
+          clarity in real situations.
+        </p>
 
-      <TopicHubIntro title={intro.title} paragraphs={intro.paragraphs} />
-
+        <div className="mt-5 rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-page)] p-4 md:p-5">
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {whatYouWillLearn.map((item) => (
+              <li key={item} className="flex items-start gap-2.5">
+                <span className="mt-0.5 shrink-0">
+                  <Image src={checkIcon} alt="" width={16} height={16} />
+                </span>
+                <span className="text-sm text-[color:var(--text-secondary)] md:text-base">
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
       <TopicsCards topics={topicsLists} basePath="/emotional-intelligence" />
 
-      <LearningContentSections sections={whatYouGetSections} />
+      <section className="rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] p-6 text-center shadow-[var(--shadow-soft)] md:p-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-primary)]">
+          Coming soon
+        </p>
+        <h2 className="mt-3 text-xl font-semibold tracking-tight text-[color:var(--text-primary)] md:text-2xl">
+          Many more topics are on the way
+        </h2>
+        <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-[color:var(--text-secondary)] md:text-base">
+          We’re building more guides with the same simple steps, practice plans,
+          and real-life examples.
+        </p>
+      </section>
+
+      <YtVideocard
+        ytVideoUrl={ytdetails.ytVideoUrl}
+        title={ytdetails.title}
+        description={ytdetails.description}
+      />
 
       <div className="space-y-8 md:space-y-10">
         <TopicPullQuoteCard
@@ -93,6 +160,12 @@ export default function EmotionalIntelligencePage() {
           role={emotionalIntelligenceModernLayouts.quote.role}
         />
       </div>
+
+      <FaqSections
+        faqLists={FAQLists}
+        title={FAQHeading.title}
+        description={FAQHeading.description}
+      />
     </div>
   );
 }

@@ -61,24 +61,29 @@ export default function page() {
 
   const FAQLists = [
     {
-      question: "What is safety?",
+      question: "What does “real-world awareness” mean?",
       answer:
-        "Safety is a very important safety measure for crane operators. It is a safety measure that is used to protect the crane operator from the crane lift zone.",
+        "It means noticing risks early, understanding what’s happening around you, and making safer decisions in daily life—at home, on the road, in buildings, and in emergencies.",
     },
     {
-      question: "What is safety?",
+      question: "What are the most important safety habits to start with?",
       answer:
-        "Safety is a very important safety measure for crane operators. It is a safety measure that is used to protect the crane operator from the crane lift zone.",
+        "Start with simple habits: follow road rules, use helmets/seatbelts, learn emergency exits, keep emergency numbers saved, and avoid unsafe shortcuts (like running across roads or using lifts during fire alarms).",
     },
     {
-      question: "What is safety?",
+      question: "How can I stay safe in public places?",
       answer:
-        "Safety is a very important safety measure for crane operators. It is a safety measure that is used to protect the crane operator from the crane lift zone.",
+        "Stay alert, avoid isolated areas when possible, keep your phone charged, tell someone where you’re going, and trust your instincts—if something feels wrong, step away and find help.",
     },
     {
-      question: "What is safety?",
+      question: "What should I do in a fire or building emergency?",
       answer:
-        "Safety is a very important safety measure for crane operators. It is a safety measure that is used to protect the crane operator from the crane lift zone.",
+        "Stay calm, use stairs (not lifts), follow exit signs, help others if it’s safe, and move to the assembly point. If there’s smoke, stay low and cover your nose and mouth with a cloth.",
+    },
+    {
+      question: "How do I teach kids basic safety without scaring them?",
+      answer:
+        "Use simple rules, short examples, and practice drills (like crossing roads and finding exits). Focus on confidence: “If you feel unsafe, find a trusted adult and ask for help.”",
     },
   ];
 

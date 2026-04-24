@@ -12,36 +12,10 @@ export default function YtVideocard({ ytVideoUrl, title, description }) {
 
   if (!videoId) return null;
   return (
-    <div className="mt-8 overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)] transition-shadow duration-200 hover:shadow-md">
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_420px]">
-        {/* Left Side: Content */}
-        <div className="flex flex-col justify-center p-6 sm:p-7 lg:p-8">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[color:var(--text-muted)]">
-            Video
-          </p>
-          <h3 className="mt-2 text-xl font-bold tracking-tight text-[color:var(--text-primary)] sm:text-2xl">
-            {title || "Safety Video"}
-          </h3>
-
-          <p className="mt-3 max-w-prose text-sm leading-relaxed text-[color:var(--text-secondary)]">
-            {description ||
-              "Must watch these basic and important life lessons: fire exits, drills, stairs, and staying alert indoors."}
-          </p>
-
-          <div className="mt-4 flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[color:var(--color-primary)] opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[color:var(--color-primary)]" />
-            </span>
-            <span className="text-xs font-semibold uppercase tracking-widest text-[color:var(--color-primary)]">
-              Watch now
-            </span>
-          </div>
-        </div>
-
-        {/* Right Side: Video Container */}
-        <div className="relative w-full overflow-hidden border-t border-[color:var(--border-light)] md:border-l md:border-t-0">
-          <div className="aspect-[16/8] w-full">
+    <section className="overflow-hidden rounded-2xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)]">
+      <div className="grid grid-cols-1 gap-0 md:grid-cols-2">
+        <div className="relative w-full overflow-hidden bg-[color:var(--hover-bg)]">
+          <div className="aspect-video w-full">
             <iframe
               className="h-full w-full border-none"
               src={`https://www.youtube-nocookie.com/embed/${videoId}`}
@@ -52,7 +26,22 @@ export default function YtVideocard({ ytVideoUrl, title, description }) {
             />
           </div>
         </div>
+
+        <div className="flex flex-col justify-center border-t border-[color:var(--border-light)] p-6 md:border-l md:border-t-0 md:p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--color-primary)]">
+            Video
+          </p>
+          <h3 className="mt-3 text-xl font-semibold tracking-tight text-[color:var(--text-primary)] md:text-2xl">
+            {title || "Featured video"}
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-[color:var(--text-secondary)] md:text-base">
+            {description || ""}
+          </p>
+          <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-primary)]">
+            Watch now <span aria-hidden="true">→</span>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

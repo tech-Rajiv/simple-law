@@ -2,42 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useMemo, useState } from 'react'
-
-const GROUPS = [
-    {
-        id: 'saftey',
-        label: 'safety',
-        items: [
-            { href: '/saftey/road-safety', label: 'road safety' },
-            { href: '/saftey/building-safety', label: 'building safety' },
-        ],
-    },
-    {
-        id: 'health',
-        label: 'health',
-        items: [
-            { href: '/health/first-aid', label: 'first aid' },
-            { href: '/health/senior-care', label: 'senior care' },
-        ],
-    },
-    {
-        id: 'learning',
-        label: 'learning',
-        items: [
-            { href: '/learning/good-habits', label: 'good habits' },
-            { href: '/learning/basic-laws', label: 'basic laws' },
-        ],
-    },
-    {
-        id: 'fun',
-        label: 'fun',
-        items: [
-            { href: '/fun/stories', label: 'stories' },
-            { href: '/fun/games', label: 'games' },
-        ],
-    },
-]
+import { useMemo } from 'react'
 
 function itemClass(isActive) {
     return [
@@ -52,23 +17,11 @@ function itemClass(isActive) {
 
 export default function Sidebar({ onNavigate, onClose }) {
     const pathname = usePathname()
-    const [openGroups, setOpenGroups] = useState(
-        () => new Set(GROUPS.map((g) => g.id))
-    )
 
     const activeHref = useMemo(() => pathname || '/', [pathname])
 
     function handleNavigate() {
         if (typeof onNavigate === 'function') onNavigate()
-    }
-
-    function toggleGroup(id) {
-        setOpenGroups((prev) => {
-            const next = new Set(prev)
-            if (next.has(id)) next.delete(id)
-            else next.add(id)
-            return next
-        })
     }
 
     return (
@@ -101,53 +54,44 @@ export default function Sidebar({ onNavigate, onClose }) {
                 </Link>
 
                 <Link
-                    href="/issues"
+                    href="/assessment"
                     onClick={handleNavigate}
-                    className={itemClass(activeHref === '/issues')}
+                    className={itemClass(activeHref === '/assessment')}
                 >
-                    Issues
+                    Assessments
                 </Link>
 
-                <div className="my-4 h-px bg-[color:var(--border-light)]" />
+                <Link
+                    href="/emotional-intelligence"
+                    onClick={handleNavigate}
+                    className={itemClass(activeHref.startsWith('/emotional-intelligence'))}
+                >
+                    Emotional Intelligence
+                </Link>
 
-                {GROUPS.map((group) => {
-                    const isOpen = openGroups.has(group.id)
-                    return (
-                        <div key={group.id} className="flex flex-col gap-0.5">
-                            <button
-                                type="button"
-                                onClick={() => toggleGroup(group.id)}
-                                className="flex w-full items-center justify-between rounded-md bg-transparent px-3 py-2.5 text-left text-sm font-medium text-[color:var(--text-secondary)] hover:bg-[color:var(--hover-bg)]"
-                                aria-expanded={isOpen}
-                            >
-                                <span className="capitalize">{group.label}</span>
-                                <span className="text-[color:var(--text-muted)]" aria-hidden>
-                                    {isOpen ? '▾' : '▸'}
-                                </span>
-                            </button>
+                <Link
+                    href="/women"
+                    onClick={handleNavigate}
+                    className={itemClass(activeHref.startsWith('/women'))}
+                >
+                    Women
+                </Link>
 
-                            {isOpen ? (
-                                <div className="mt-1 flex flex-col gap-0.5 pl-2">
-                                    {group.items.map((it) => {
-                                        const isActive =
-                                            activeHref === it.href ||
-                                            activeHref?.startsWith(it.href + '/')
-                                        return (
-                                            <Link
-                                                key={it.href}
-                                                href={it.href}
-                                                onClick={handleNavigate}
-                                                className={itemClass(isActive)}
-                                            >
-                                                {it.label}
-                                            </Link>
-                                        )
-                                    })}
-                                </div>
-                            ) : null}
-                        </div>
-                    )
-                })}
+                <Link
+                    href="/awareness"
+                    onClick={handleNavigate}
+                    className={itemClass(activeHref.startsWith('/awareness'))}
+                >
+                    Real-world Awareness
+                </Link>
+
+                <Link
+                    href="/complaint"
+                    onClick={handleNavigate}
+                    className={itemClass(activeHref === '/complaint')}
+                >
+                    Complaint guide
+                </Link>
             </nav>
         </div>
     )

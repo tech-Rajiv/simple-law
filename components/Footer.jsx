@@ -4,26 +4,26 @@ import Image from 'next/image'
 
 const FOOTER_LINKS = [
   {
-    title: 'Product',
-    links: [
-      { label: 'Take a test', href: '/#take-test' },
-      { label: 'Topics', href: '/#topics' },
-      { label: 'How it works', href: '/#how-it-works' },
-    ],
-  },
-  {
     title: 'Explore',
     links: [
-      { label: 'Safety', href: '/safety' },
-      { label: 'Health', href: '/health' },
-      { label: 'Learning', href: '/learning' },
+      { label: 'Home', href: '/' },
+      { label: 'Assessments', href: '/assessment' },
+      { label: 'Real-world Awareness', href: '/awareness' },
     ],
   },
   {
-    title: 'Resources',
+    title: 'Learning hubs',
     links: [
-      { label: 'FAQ', href: '/#faq' },
-      { label: 'All tests', href: '/#take-test' },
+      { label: 'Emotional Intelligence', href: '/emotional-intelligence' },
+      { label: 'Women', href: '/women' },
+      { label: 'Complaint guide', href: '/complaint' },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { label: 'WhatsApp support', href: 'https://wa.me/919998487424?text=Hi%20there%21' },
+      { label: 'Complaint guide', href: '/complaint' },
       { label: 'Home', href: '/' },
     ],
   },
@@ -36,31 +36,33 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-12 md:items-start">
           <div className="md:col-span-4">
             <div className="flex items-center gap-3">
-              <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-[color:var(--border-light)] bg-[color:var(--bg-section)] shadow-[var(--shadow-soft)]">
+              <div className="" aria-hidden="true">
                 <Image
-                  src="/home/awareness.png"
-                  alt="SimpleLaw"
-                  fill
-                  sizes="40px"
-                  className="object-cover"
+                  src="/home/brand/brand-logo.png"
+                  alt="100xLife"
+                  width={40}
+                  height={40}
+                  className="object-contain"
                 />
               </div>
               <div>
-                <div className="text-sm font-bold text-[color:var(--text-primary)]">SimpleLaw</div>
-                <div className="text-xs text-[color:var(--text-secondary)]">Learn by quick self-checks</div>
+                <div className="text-sm font-bold text-[color:var(--text-primary)]">100xLife</div>
+                <div className="text-xs text-[color:var(--text-secondary)]">
+                  Learn by quick self-checks
+                </div>
               </div>
             </div>
 
             <p className="mt-4 text-sm leading-relaxed text-[color:var(--text-secondary)]">
-              Short quizzes for safety, emotional intelligence, awareness, and women-focused issues.
-              Built for clarity and calm learning.
+              Short quizzes for emotional intelligence, awareness, and women-focused
+              issues. Built for clarity and calm learning.
             </p>
 
             <div className="mt-5 flex flex-wrap gap-3">
-              <Link href="/#take-test" className="btn-primary">
-                Take a test
+              <Link href="/assessment" className="btn-primary">
+                Take an assessment
               </Link>
-              <Link href="/#topics" className="btn-secondary">
+              <Link href="/emotional-intelligence" className="btn-secondary">
                 Explore topics
               </Link>
             </div>
@@ -90,17 +92,16 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-2 border-t border-[color:var(--border-light)] pt-6 text-xs text-[color:var(--text-secondary)] sm:flex-row sm:items-center sm:justify-between">
-          <div>© {new Date().getFullYear()} SimpleLaw. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} 100xLife. All rights reserved.</div>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
-            <Link href="/" className="hover:text-[color:var(--color-primary)]">
-              Privacy
-            </Link>
-            <Link href="/" className="hover:text-[color:var(--color-primary)]">
-              Terms
-            </Link>
-            <Link href="/" className="hover:text-[color:var(--color-primary)]">
-              Contact
-            </Link>
+            <a
+              href="https://wa.me/919998487424?text=Hi%20there%21"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-[color:var(--color-primary)]"
+            >
+              WhatsApp support
+            </a>
           </div>
         </div>
       </div>

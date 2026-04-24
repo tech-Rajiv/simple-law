@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import { useCallback, useEffect, useId, useState } from 'react'
+import Image from "next/image";
+import { useCallback, useEffect, useId, useState } from "react";
 
 /**
  * Simple carousel for topic detail pages. Pass one slot per slide; use imageSrc: null for empty placeholders.
@@ -10,41 +10,44 @@ import { useCallback, useEffect, useId, useState } from 'react'
  * @param {{ imageSrc?: string | null, alt?: string, caption?: string }[]} props.slides
  * @param {string} [props.heading]
  */
-export default function TopicImageCarousel({ slides = [], heading = 'Illustrations' }) {
-  const id = useId()
-  const [index, setIndex] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const count = slides.length
+export default function TopicImageCarousel({
+  slides = [],
+  heading = "Illustrations",
+}) {
+  const id = useId();
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const count = slides.length;
 
   const go = useCallback(
     (next) => {
-      if (count === 0) return
-      const i = ((next % count) + count) % count
-      setIndex(i)
+      if (count === 0) return;
+      const i = ((next % count) + count) % count;
+      setIndex(i);
     },
-    [count]
-  )
+    [count],
+  );
 
   useEffect(() => {
-    if (count < 2) return
-    if (paused) return
+    if (count < 2) return;
+    if (paused) return;
     const t = window.setInterval(() => {
-      setIndex((prev) => ((prev + 1) % count + count) % count)
-    }, 4500)
-    return () => window.clearInterval(t)
-  }, [count, paused])
+      setIndex((prev) => (((prev + 1) % count) + count) % count);
+    }, 4500);
+    return () => window.clearInterval(t);
+  }, [count, paused]);
 
   useEffect(() => {
     function onKey(e) {
-      if (count < 2) return
-      if (e.key === 'ArrowLeft') go(index - 1)
-      if (e.key === 'ArrowRight') go(index + 1)
+      if (count < 2) return;
+      if (e.key === "ArrowLeft") go(index - 1);
+      if (e.key === "ArrowRight") go(index + 1);
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [count, go, index])
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [count, go, index]);
 
-  if (count === 0) return null
+  if (count === 0) return null;
 
   return (
     <section
@@ -56,11 +59,11 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      {heading ? (
+      {/* {heading ? (
         <h2 className="text-lg font-semibold text-[color:var(--text-primary)]">{heading}</h2>
-      ) : null}
+      ) : null} */}
 
-      <div className={heading ? 'mt-4' : ''}>
+      <div className={heading ? "mt-4" : ""}>
         <div className="relative overflow-hidden rounded-xl bg-[color:var(--hover-bg)]">
           <div
             className="flex transition-transform duration-300 ease-out"
@@ -80,7 +83,7 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                   {slide.imageSrc ? (
                     <Image
                       src={slide.imageSrc}
-                      alt={slide.alt || ''}
+                      alt={slide.alt || ""}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 760px"
@@ -88,9 +91,12 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                     />
                   ) : (
                     <div className="flex h-full min-h-[200px] w-full flex-col items-center justify-center gap-2 bg-[color:var(--bg-topic-serious)] px-6 text-center md:min-h-[240px]">
-                      <span className="text-sm font-medium text-[color:var(--text-muted)]">Image slot {i + 1}</span>
+                      <span className="text-sm font-medium text-[color:var(--text-muted)]">
+                        Image slot {i + 1}
+                      </span>
                       <span className="max-w-xs text-xs text-[color:var(--text-muted)]">
-                        Add your visual here later — background reserved for your asset.
+                        Add your visual here later — background reserved for
+                        your asset.
                       </span>
                     </div>
                   )}
@@ -112,8 +118,8 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                 type="button"
                 className="rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)]"
                 onClick={() => {
-                  setPaused(true)
-                  go(index - 1)
+                  setPaused(true);
+                  go(index - 1);
                 }}
                 aria-controls={`${id}-track`}
                 aria-label="Previous slide"
@@ -124,8 +130,8 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                 type="button"
                 className="rounded-lg border border-[color:var(--border-light)] bg-[color:var(--bg-card)] px-3 py-2 text-sm font-medium text-[color:var(--text-primary)] hover:bg-[color:var(--hover-bg)]"
                 onClick={() => {
-                  setPaused(true)
-                  go(index + 1)
+                  setPaused(true);
+                  go(index + 1);
                 }}
                 aria-controls={`${id}-track`}
                 aria-label="Next slide"
@@ -133,7 +139,11 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                 Next
               </button>
             </div>
-            <div className="flex gap-1.5" role="tablist" aria-label="Slide indicators">
+            <div
+              className="flex gap-1.5"
+              role="tablist"
+              aria-label="Slide indicators"
+            >
               {slides.map((_, i) => (
                 <button
                   key={i}
@@ -142,13 +152,15 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
                   aria-selected={i === index}
                   aria-label={`Go to slide ${i + 1}`}
                   onClick={() => {
-                    setPaused(true)
-                    go(i)
+                    setPaused(true);
+                    go(i);
                   }}
                   className={[
-                    'h-2.5 w-2.5 rounded-full transition-colors',
-                    i === index ? 'bg-[color:var(--color-primary)]' : 'bg-[color:var(--border-light)] hover:bg-[color:var(--text-muted)]',
-                  ].join(' ')}
+                    "h-2.5 w-2.5 rounded-full transition-colors",
+                    i === index
+                      ? "bg-[color:var(--color-primary)]"
+                      : "bg-[color:var(--border-light)] hover:bg-[color:var(--text-muted)]",
+                  ].join(" ")}
                 />
               ))}
             </div>
@@ -156,5 +168,5 @@ export default function TopicImageCarousel({ slides = [], heading = 'Illustratio
         ) : null}
       </div>
     </section>
-  )
+  );
 }

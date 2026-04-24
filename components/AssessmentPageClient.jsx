@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import TopicsCards from "@/components/shared/TopicsCards";
+import SubHeading from "@/components/shared/SubHeading";
 
 // const DEFAULT_API_BASE = "https://admin.100xlife.online";
 const DEFAULT_API_BASE = "http://localhost:3001";
@@ -147,6 +148,66 @@ export default function AssessmentPageClient() {
     return topics;
   }, [categories]);
 
+  const testTopicsBySubject = useMemo(() => {
+    const normalize = (s) => String(s ?? "").trim().toLowerCase();
+    const groups = {
+      women: { title: "Women", description: "", topics: [] },
+      awareness: { title: "Real-world Awareness", description: "", topics: [] },
+      emotionalIntelligence: {
+        title: "Emotional Intelligence",
+        description: "",
+        topics: [],
+      },
+    };
+
+    const rows = Array.isArray(categories) ? categories : [];
+
+    for (const row of rows) {
+      const titleRaw =
+        row?.subject?.title != null ? String(row.subject.title) : "";
+      const title = normalize(titleRaw);
+
+      let key = null;
+      if (title.includes("women")) key = "women";
+      else if (title.includes("awareness")) key = "awareness";
+      else if (title.includes("emotional")) key = "emotionalIntelligence";
+      else if (normalize(row?.subject?.slug).includes("women")) key = "women";
+      else if (normalize(row?.subject?.slug).includes("awareness"))
+        key = "awareness";
+      else if (normalize(row?.subject?.slug).includes("emotional"))
+        key = "emotionalIntelligence";
+
+      if (!key) continue;
+
+      if (!groups[key].description && row?.subject?.description) {
+        groups[key].description = String(row.subject.description);
+      }
+
+      const tests = Array.isArray(row?.tests) ? row.tests : [];
+      for (const t of tests) {
+        const testSlug =
+          t?.id != null ? String(t.id) : String(t?.title || "test");
+        const label = t?.title ? String(t.title) : "Test";
+        const description = t?.description
+          ? String(t.description)
+          : titleRaw
+            ? `Category: ${titleRaw}`
+            : "Take a short multiple-choice check — results at the end.";
+        const imageSrc =
+          t?.thumbnail || row?.subject?.thumbnail || row?.subject?.image || null;
+
+        groups[key].topics.push({
+          href: `/test/${testSlug}`,
+          label,
+          description,
+          imageSrc,
+        });
+      }
+    }
+
+    return groups;
+  }, [categories]);
+
   return (
     <div className="w-full pb-12 pt-2 md:pt-4">
       <header className="relative mb-10 overflow-hidden rounded-3xl border border-[color:var(--border-light)] bg-[color:var(--bg-card)] shadow-[0_8px_30px_rgba(0,0,0,0.06)] md:mb-12">
@@ -206,7 +267,49 @@ export default function AssessmentPageClient() {
           No assessments found.
         </div>
       ) : (
-        <TopicsCards topics={testTopics} basePath="" />
+        <div className="space-y-10 md:space-y-12">
+          {testTopicsBySubject.women.topics.length > 0 ? (
+            <section className="space-y-4">
+              <SubHeading
+                eyebrow="Subject"
+                title={testTopicsBySubject.women.title}
+                description={testTopicsBySubject.women.description}
+              />
+              <TopicsCards
+                topics={testTopicsBySubject.women.topics}
+                basePath=""
+              />
+            </section>
+          ) : null}
+
+          {testTopicsBySubject.awareness.topics.length > 0 ? (
+            <section className="space-y-4">
+              <SubHeading
+                eyebrow="Subject"
+                title={testTopicsBySubject.awareness.title}
+                description={testTopicsBySubject.awareness.description}
+              />
+              <TopicsCards
+                topics={testTopicsBySubject.awareness.topics}
+                basePath=""
+              />
+            </section>
+          ) : null}
+
+          {testTopicsBySubject.emotionalIntelligence.topics.length > 0 ? (
+            <section className="space-y-4">
+              <SubHeading
+                eyebrow="Subject"
+                title={testTopicsBySubject.emotionalIntelligence.title}
+                description={testTopicsBySubject.emotionalIntelligence.description}
+              />
+              <TopicsCards
+                topics={testTopicsBySubject.emotionalIntelligence.topics}
+                basePath=""
+              />
+            </section>
+          ) : null}
+        </div>
       )}
     </div>
   );

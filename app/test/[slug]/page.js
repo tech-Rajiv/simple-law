@@ -4,9 +4,161 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import YtVideocard from "@/components/shared/YtVideocard";
 
 function classNames(...xs) {
   return xs.filter(Boolean).join(" ");
+}
+
+function ScoreGauge({ score = 0, total = 0 }) {
+  const safeTotal = Number(total) > 0 ? Number(total) : 0;
+  const safeScore = Math.max(0, Math.min(Number(score) || 0, safeTotal || 0));
+  const pct = safeTotal ? safeScore / safeTotal : 0;
+  const percentLabel = safeTotal ? Math.round(pct * 100) : 0;
+
+  const verdict = (() => {
+    if (!safeTotal) return { label: "Completed", hint: "Nice work finishing the test." };
+    if (pct >= 0.85) return { label: "Excellent", hint: "You’re strong on this topic. Try a harder test or explore guides for edge cases." };
+    if (pct >= 0.65) return { label: "Good", hint: "Solid base. Review a couple of questions you missed and try again." };
+    if (pct >= 0.4) return { label: "Getting there", hint: "You’ve started well. Skim the guides, then retake to lock it in." };
+    return { label: "Keep going", hint: "Don’t worry — learn the basics in the guides and retake this test." };
+  })();
+
+  const [animatedPct, setAnimatedPct] = useState(0);
+  const [displayScore, setDisplayScore] = useState(0);
+
+  useEffect(() => {
+    let raf = 0;
+    const start = performance.now();
+    const duration = 750;
+
+    const fromPct = 0;
+    const toPct = pct;
+    const fromScore = 0;
+    const toScore = safeScore;
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function tick(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const e = easeOutCubic(t);
+      setAnimatedPct(fromPct + (toPct - fromPct) * e);
+      setDisplayScore(Math.round(fromScore + (toScore - fromScore) * e));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    }
+
+    setAnimatedPct(0);
+    setDisplayScore(0);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [pct, safeScore]);
+
+  // Semicircle gauge: SVG arc from left->right
+  const strokeWidth = 14;
+  const r = 76;
+  const cx = 100;
+  const cy = 92;
+  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`;
+  const arcLen = Math.PI * r;
+  const dashOffset = arcLen * (1 - animatedPct);
+
+  return (
+    <div className="rounded-2xl bg-[color:var(--bg-card)] px-5 py-6 shadow-[var(--shadow-soft)]">
+      <div className="flex flex-col items-center text-center gap-2">
+        <div className="text-xs font-semibold uppercase tracking-widest text-[color:var(--text-muted)]">
+          Your score
+        </div>
+        <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--border-light)] bg-[color:var(--bg-page)] px-3 py-1 text-xs font-semibold text-[color:var(--text-primary)]">
+          <span className="text-[color:var(--color-primary)]">{verdict.label}</span>
+          <span className="text-[color:var(--text-muted)]">•</span>
+          <span className="text-[color:var(--text-secondary)]">{percentLabel}%</span>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-center">
+        <svg
+          width="320"
+          height="180"
+          viewBox="0 0 200 120"
+          role="img"
+          aria-label={`Score ${safeScore} out of ${safeTotal}`}
+          className="w-full max-w-[340px]"
+        >
+          <defs>
+            <linearGradient id="scoreGradient" x1="0" y1="0" x2="200" y2="0">
+              <stop offset="0%" stopColor="var(--color-secondary)" />
+              <stop offset="55%" stopColor="var(--color-primary)" />
+              <stop offset="100%" stopColor="var(--color-secondary)" />
+            </linearGradient>
+          </defs>
+
+          <path
+            d={arcPath}
+            fill="none"
+            stroke="color-mix(in srgb, var(--border-light) 70%, transparent)"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+          />
+          <path
+            d={arcPath}
+            fill="none"
+            stroke="url(#scoreGradient)"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeDasharray={arcLen}
+            strokeDashoffset={dashOffset}
+          />
+
+          <text
+            x="100"
+            y="76"
+            textAnchor="middle"
+            className="fill-[color:var(--text-primary)]"
+            style={{ fontSize: 34, fontWeight: 800 }}
+          >
+            {displayScore}
+          </text>
+          <text
+            x="100"
+            y="96"
+            textAnchor="middle"
+            className="fill-[color:var(--text-secondary)]"
+            style={{ fontSize: 12, fontWeight: 600 }}
+          >
+            out of {safeTotal}
+          </text>
+
+          <text
+            x={cx - r}
+            y={cy + 20}
+            textAnchor="start"
+            className="fill-[color:var(--text-muted)]"
+            style={{ fontSize: 11, fontWeight: 600 }}
+          >
+            0
+          </text>
+          <text
+            x={cx + r}
+            y={cy + 20}
+            textAnchor="end"
+            className="fill-[color:var(--text-muted)]"
+            style={{ fontSize: 11, fontWeight: 600 }}
+          >
+            {safeTotal}
+          </text>
+        </svg>
+      </div>
+
+      <div className="mt-1 text-center text-sm text-[color:var(--text-secondary)]">
+        {verdict.hint}
+      </div>
+      <div className="mt-2 text-center text-xs text-[color:var(--text-muted)]">
+        Review answers below, then explore more to improve.
+      </div>
+    </div>
+  );
 }
 
 // const DEFAULT_API_BASE = "https://admin.100xlife.online";
@@ -44,10 +196,38 @@ async function fetchJson(path, { method = "GET", body } = {}) {
 }
 
 const LEARN_MORE = {
-  safety: { href: "/safety", label: "Safety", imageSrc: "/category/learn-safety.webp" },
-  emotion: { href: "/learning", label: "Emotion", imageSrc: "/category/learn-emotion.webp" },
-  women: { href: "/safety", label: "Women safety", imageSrc: "/category/learn-women.jpg" },
-  awareness: { href: "/learning", label: "Awareness", imageSrc: "/category/learn-awareness.webp" },
+  emotionalIntelligence: {
+    href: "/emotional-intelligence",
+    label: "Emotional Intelligence",
+    imageSrc: "/category/learn-emotion.webp",
+  },
+  women: { href: "/women", label: "Women", imageSrc: "/category/learn-women.jpg" },
+  awareness: {
+    href: "/awareness",
+    label: "Real-world Awareness",
+    imageSrc: "/category/learn-awareness.webp",
+  },
+};
+
+const SUBJECT_YT = {
+  women: {
+    title: "Women’s safety & rights video",
+    description:
+      "A short video to build awareness and encourage action with clarity and confidence.",
+    ytVideoUrl: "https://youtu.be/Neho6BCJeoc?si=v4TBH6QcKNrCR33s",
+  },
+  awareness: {
+    title: "Awareness video",
+    description:
+      "A quick video to help you understand awareness in real life and how to stay safer with simple habits.",
+    ytVideoUrl: "https://www.youtube.com/watch?v=gAcpbxzAb9A",
+  },
+  emotionalIntelligence: {
+    title: "Emotional Intelligence Video",
+    description:
+      "Watch this to quickly understand emotional intelligence and how to use it in real life.",
+    ytVideoUrl: "https://youtu.be/D6_J7FfgWVc?si=5_NV6VzHJ9nruXmK",
+  },
 };
 
 function normalizeQuestions(rawQuestions) {
@@ -105,12 +285,23 @@ export default function TestRunnerPage() {
 
   const title = testMeta?.title || "Test";
   const learnMore = useMemo(() => {
-    const subjectTitle = testMeta?.subject?.title ? String(testMeta.subject.title).toLowerCase() : "";
-    if (subjectTitle.includes("safety")) return LEARN_MORE.safety;
-    if (subjectTitle.includes("emotion")) return LEARN_MORE.emotion;
+    const subjectTitle = testMeta?.subject?.title
+      ? String(testMeta.subject.title).toLowerCase()
+      : "";
     if (subjectTitle.includes("women")) return LEARN_MORE.women;
-    if (subjectTitle.includes("fitness")) return LEARN_MORE.awareness;
-    if (subjectTitle.includes("social") || subjectTitle.includes("awareness")) return LEARN_MORE.awareness;
+    if (subjectTitle.includes("awareness")) return LEARN_MORE.awareness;
+    if (subjectTitle.includes("emotion"))
+      return LEARN_MORE.emotionalIntelligence;
+    return null;
+  }, [testMeta]);
+
+  const youtubeDetails = useMemo(() => {
+    const subjectTitle = testMeta?.subject?.title
+      ? String(testMeta.subject.title).toLowerCase()
+      : "";
+    if (subjectTitle.includes("women")) return SUBJECT_YT.women;
+    if (subjectTitle.includes("awareness")) return SUBJECT_YT.awareness;
+    if (subjectTitle.includes("emotion")) return SUBJECT_YT.emotionalIntelligence;
     return null;
   }, [testMeta]);
 
@@ -274,7 +465,21 @@ export default function TestRunnerPage() {
   }
 
   function onBack() {
-    const ok = window.confirm("Go back? Your changes/answers will not be saved.");
+    if (result) {
+      if (progressStorageKey) {
+        try {
+          sessionStorage.removeItem(progressStorageKey);
+        } catch {
+          // ignore
+        }
+      }
+      router.replace("/assessment");
+      return;
+    }
+
+    const ok = window.confirm(
+      "Go back to assessments? Your current progress will be removed.",
+    );
     if (!ok) return;
     if (progressStorageKey) {
       try {
@@ -309,7 +514,11 @@ export default function TestRunnerPage() {
       <div className="w-full px-4 py-5 min-h-dvh flex flex-col">
         <div className="w-full">
           <div className="relative mx-auto w-full max-w-7xl">
-            <button type="button" onClick={onBack} className="btn-primary w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={onBack}
+              className="btn-primary w-full sm:w-auto"
+            >
               ← Back
             </button>
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -337,59 +546,56 @@ export default function TestRunnerPage() {
           ) : result ? (
             <div className="w-full flex-1 flex flex-col items-center justify-center">
               <div className="w-full max-w-4xl space-y-6">
-                <div className="rounded-2xl bg-[color:var(--bg-card)] px-5 py-5 shadow-[var(--shadow-soft)] text-center">
-                  <div className="text-xs font-semibold uppercase tracking-widest text-[color:var(--text-muted)]">
-                    Your score
-                  </div>
-                  <div className="mt-2 flex items-end justify-center gap-2">
-                    <div className="text-4xl font-bold leading-none text-[color:var(--text-primary)]">
-                      {result.score}
-                    </div>
-                    <div className="pb-1 text-sm font-semibold text-[color:var(--text-muted)]">
-                      / {result.total}
-                    </div>
-                  </div>
-                  <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-[color:var(--bg-section)]">
-                    <div
-                      className="h-full rounded-full bg-[color:var(--color-primary)]"
-                      style={{
-                        width: `${result.total ? Math.round((result.score / result.total) * 100) : 0}%`,
-                      }}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="mt-3 text-sm text-[color:var(--text-secondary)]">
-                    Review your answers below.
-                  </div>
-                </div>
+                <ScoreGauge score={result.score} total={result.total} />
 
                 {learnMore ? (
                   <div className="rounded-2xl bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)] overflow-hidden">
-                    <div className="">
-                      <div className="relative h-52 sm:h-64 md:h-auto md:min-h-[300px] ">
+                    <div className="grid grid-cols-1 md:grid-cols-2">
+                      <div className="relative w-full overflow-hidden bg-[color:var(--bg-section)]">
+                        <div className="aspect-video w-full">
                         <Image
                           src={learnMore.imageSrc}
-                          alt={`Learn more about ${learnMore.label}`}
+                          alt={`Explore ${learnMore.label}`}
                           fill
-                          sizes="(max-width: 768px) 100vw, 320px"
-                          className="object-contain"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover"
                         />
+                        </div>
                       </div>
-                      <div className="p-4 flex flex-col justify-center gap-3">
+
+                      <div className="flex flex-col justify-center border-t border-[color:var(--border-light)] p-6 md:border-l md:border-t-0 md:p-8">
                         <div>
                           <div className="text-sm font-semibold text-[color:var(--text-primary)]">
-                            Learn more about {learnMore.label}
+                            Explore more about {learnMore.label}
                           </div>
-                          <div className="mt-1 text-sm text-[color:var(--text-secondary)]">
+                          <div className="mt-1 text-sm leading-relaxed text-[color:var(--text-secondary)]">
                             Explore articles and tips to improve your understanding.
                           </div>
                         </div>
-                        <Link href={learnMore.href} replace className="btn-primary py-3">
-                          Learn about {learnMore.label} →
-                        </Link>
+
+                        <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--text-muted)]">
+                            Next step
+                          </div>
+                          <Link
+                            href={learnMore.href}
+                            replace
+                            className="btn-primary inline-flex min-h-[52px] w-full items-center justify-center px-6 py-3 text-base font-semibold sm:w-auto"
+                          >
+                            Explore more →
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
+                ) : null}
+
+                {youtubeDetails ? (
+                  <YtVideocard
+                    ytVideoUrl={youtubeDetails.ytVideoUrl}
+                    title={youtubeDetails.title}
+                    description={youtubeDetails.description}
+                  />
                 ) : null}
 
                 <div className="space-y-3">
@@ -480,7 +686,7 @@ export default function TestRunnerPage() {
 
               {currentQuestion.imageUrl ? (
                 <div className="mt-5 w-full max-w-3xl">
-                  <div className="relative mx-auto aspect-[16/9] w-full overflow-hidden rounded-2xl bg-[color:var(--bg-section)]">
+                  <div className="relative mx-auto aspect-[16/9] w-full overflow-hidden rounded-2xl bg-transparent">
                     <Image
                       src={currentQuestion.imageUrl}
                       alt={currentQuestion.question}
